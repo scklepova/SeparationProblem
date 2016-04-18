@@ -1,0 +1,8 @@
+C:\Users\olga.karpova\Downloads\SeparationProblem-2016-04-18\SeparationProblem\SeparationProblem\bin\Debug\SeparationProblem.exe.config
+C:\Users\olga.karpova\Downloads\SeparationProblem-2016-04-18\SeparationProblem\SeparationProblem\obj\Debug\SeparationProblem.exe
+C:\Users\olga.karpova\Downloads\SeparationProblem-2016-04-18\SeparationProblem\SeparationProblem\obj\Debug\SeparationProblem.pdb
+C:\Users\olga.karpova\Downloads\SeparationProblem-2016-04-18\SeparationProblem\SeparationProblem\bin\Debug\SeparationProblem.exe
+C:\Users\olga.karpova\Downloads\SeparationProblem-2016-04-18\SeparationProblem\SeparationProblem\bin\Debug\SeparationProblem.pdb
+C:\Users\olga.karpova\Downloads\SeparationProblem-2016-04-18\SeparationProblem\SeparationProblem\bin\Debug\nunit.framework.dll
+C:\Users\olga.karpova\Downloads\SeparationProblem-2016-04-18\SeparationProblem\SeparationProblem\bin\Debug\nunit.framework.xml
+C:\Users\olga.karpova\Downloads\SeparationProblem-2016-04-18\SeparationProblem\SeparationProblem\obj\Debug\SeparationProblem.csprojResolveAssemblyReference.cache
