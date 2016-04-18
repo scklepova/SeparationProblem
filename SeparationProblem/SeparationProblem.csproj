@@ -49,6 +49,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomFactory.cs" />
+    <Compile Include="RauzyGraph.cs" />
     <Compile Include="StringPairFactory.cs" />
     <Compile Include="Tests\RandomsTest.cs" />
   </ItemGroup>
