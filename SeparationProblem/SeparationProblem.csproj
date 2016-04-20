@@ -51,6 +51,7 @@
     <Compile Include="RandomFactory.cs" />
     <Compile Include="RauzyGraph.cs" />
     <Compile Include="StringPairFactory.cs" />
+    <Compile Include="Tests\CyclesTest.cs" />
     <Compile Include="Tests\RandomsTest.cs" />
   </ItemGroup>
   <ItemGroup>

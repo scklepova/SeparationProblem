@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace SeparationProblem
 {
@@ -13,11 +14,11 @@ namespace SeparationProblem
 
             const int numberOfStates = 5;
             const int stringLength = 40;
-            const int experimentsNumder = 10000;
+            const int experimentsNumder = 100000;
 
             for(var i = 0; i < experimentsNumder; i++)
             {
-                var pairOfStrings = StringPairFactory.GetRandomPairOfStrings(stringLength);
+                var pairOfStrings = StringPairFactory.GetPairOfEquivalentStrings(stringLength, numberOfStates - 1);
                 var wasSeparated = false;
                 
                 var iterations = 0;
@@ -26,9 +27,6 @@ namespace SeparationProblem
                     var automata = PermutationAutomataFactory.GetRandomPermutationAutomata(numberOfStates);
                     if(automata.LastState(pairOfStrings.Item1) != automata.LastState(pairOfStrings.Item2))
                     {
-//                        streamWriter.WriteLine("{0} was separated from {1} by", pairOfStrings.Item1, pairOfStrings.Item2);
-//                        streamWriter.WriteLine(automata.ToString());
-//                        streamWriter.WriteLine();
                         wasSeparated = true;
                     }
                     iterations++;
@@ -36,9 +34,10 @@ namespace SeparationProblem
 
                 if(!wasSeparated)
                 {
-                    streamWriter.WriteLine("{0} wasn't separated from {1} by", pairOfStrings.Item1, pairOfStrings.Item2);
-                    streamWriter.WriteLine();
+                    streamWriter.WriteLine("{0} {1}", pairOfStrings.Item1, pairOfStrings.Item2);
                 }
+
+                Console.WriteLine(i);
             }
 
             streamWriter.Close();
