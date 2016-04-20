@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SeparationProblem
 {
@@ -43,6 +44,33 @@ namespace SeparationProblem
             s += string.Format("InitState: {0}", initState);
 
             return s;
+        }
+
+        public bool IsConnected()
+        {
+            var used = new bool[n];
+            var stack = new Stack<int>();
+            stack.Push(initState);
+            used[initState] = true;
+            while(stack.Count > 0)
+            {
+                var v = stack.Pop();
+                var v0 = Transite(v, '0');
+                var v1 = Transite(v, '1');
+                if(!used[v1])
+                    stack.Push(v1);
+                if(!used[v0])
+                    stack.Push(v0);
+                used[v] = true;
+            }
+
+            for(var i = 0; i < n; i++)
+            {
+                if(!used[i])
+                    return false;
+            }
+
+            return true;
         }
 
         private readonly int initState;
