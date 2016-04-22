@@ -24,6 +24,11 @@ namespace SeparationProblem
             return currentState;
         }
 
+        public bool Separates(Tuple<string, string> pair)
+        {
+            return LastState(pair.Item1) != LastState(pair.Item2);
+        }
+
         private int Transite(int state, char symbol)
         {
             return transitions[symbol - '0'][state];
