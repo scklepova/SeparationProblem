@@ -18,6 +18,7 @@ namespace SeparationProblem
                 randomStr = RandomFactory.GetRandomString(length);
                 var graphRauzy = new RauzyGraph(randomStr, stretch);
                 eqString = graphRauzy.GetEquivalentString(); 
+                Console.WriteLine("------------------------------");
             }
             return new Tuple<string, string>(randomStr, eqString);
         }

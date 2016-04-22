@@ -11,7 +11,7 @@ namespace SeparationProblem
         {
 //            JoinBackups();
             RandomPermutationAutomatas();
-            AllPermutationAutomatas();
+//            AllPermutationAutomatas();
         }
 
         public static void JoinBackups()
