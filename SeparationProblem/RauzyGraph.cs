@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SeparationProblem
@@ -37,29 +38,112 @@ namespace SeparationProblem
 
         public string GetEquivalentString()
         {
+            var intervals = defaultPath;
 //            var intervals = SwapCycles(defaultPath);
-            var intervals = new List<string>();
-            var h = HasEulerPath();
-            if(h == 2)
-                intervals = TryGetEulerPath(defaultPath[0]);
-            else if(h == 0)
-            {
-                foreach(var initVertex in edges.Keys.Where(x => x != defaultPath[0]))
-                {
-                    intervals = TryGetEulerPath(initVertex);
-                    if(intervals.Count == defaultPath.Count)
-                        break;
-                }
-            }
+
+
+//            var intervals = new List<string>();
+//            FindAllPaths();
+//            
+//            foreach(var initVertex in edges.Keys.Where(x => x != defaultPath[0]))
+//            {
+//                currentPath = new Stack<string>();
+//                if(TryFindPathOfLength(defaultPath.Count, initVertex))
+//                {
+//                    Console.WriteLine("true");
+//                    intervals = currentPath.ToList();
+//                    break;
+//                }
+//            }      
+     
 
             if(intervals == null || intervals.Count != defaultPath.Count)
                 return null;
+
+            /**
+             */
+
+            if(intervals.Count(x => x == intervals[0]) >= 2)
+            {
+                var s = intervals[0].StartsWith("0") ? "1" + intervals[0].Substring(1) : "0" + intervals[0].Substring(1);
+                if(intervals.Contains(s))
+                    intervals[0] = s;
+            }
+             
+            if (intervals.Count(x => x == intervals.Last()) >= 2)
+            {
+                var s = intervals.Last().Substring(0, intervals[0].Length - 1);
+                s = intervals.Last().EndsWith("0") ? s + "1" : s + "0";
+                if(intervals.Contains(s))
+                    intervals[intervals.Count - 1] = s;
+            }
+
+            /**
+             */
 
             var ans = intervals[0];
             for(var i = 1; i < intervals.Count; i++)
                 ans += intervals[i].Last();
 
             return ans;
+        }
+
+        private bool TryFindPathOfLength(int length, string initV)
+        {
+            if(length == 0)
+            {
+                return edges.Keys.All(x => currentPath.Contains(x));
+            }
+
+//            if(length <= preLength)
+//            {
+//                foreach(var path in allPaths[initV][length])
+//                {
+//                    var newPath = new List<string>(currentPath);
+//                    newPath.Add(initV);
+//                    newPath.AddRange(path);
+//
+//                    if(edges.Keys.All(x => newPath.Contains(x)))
+//                    {
+//                        currentPath1 = newPath;
+//                        return true;
+//                    }
+//
+//                    return false;
+//                }
+//            }
+
+            currentPath.Push(initV);    
+            if (edges[initV].Any(v => TryFindPathOfLength(length - 1, v)))
+                return true;
+            currentPath.Pop();
+            return false;
+        }
+
+        private void FindAllPaths()
+        {
+            allPaths = new Dictionary<string, List<List<string>>[]>();
+            foreach(var v in edges.Keys)
+            {
+                allPaths.Add(v, new List<List<string>>[10]);
+                allPaths[v][1] = new List<List<string>>(edges[v].Select(x => new List<string>{x}).ToList());
+            }
+
+            for(var i = 2; i <= preLength; i++)
+            {
+                foreach(var v in edges.Keys)
+                {
+                    allPaths[v][i] = new List<List<string>>();
+                    foreach(var path in allPaths[v][i - 1])
+                    {
+                        foreach(var u in edges[path.Last()])
+                        {
+                            allPaths[v][i].Add(path);
+                            allPaths[v][i].Last().Add(u);
+                        }
+                    }
+                }
+            }
         }
 
         private int HasEulerPath()
@@ -273,5 +357,9 @@ namespace SeparationProblem
 
         private readonly Dictionary<string, List<string>> edges;
         private readonly List<string> defaultPath;
+        private Stack<string> currentPath;
+        private List<string> currentPath1;
+        private Dictionary<string, List<List<string>>[]> allPaths;
+        private int preLength = 7;
     }
 }

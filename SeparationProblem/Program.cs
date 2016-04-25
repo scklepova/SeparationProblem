@@ -11,7 +11,8 @@ namespace SeparationProblem
         {
 //            JoinBackups();
             RandomPermutationAutomatas();
-//            AllPermutationAutomatas();
+            AllPermutationAutomatas();
+//            AllPathsOf();
         }
 
         public static void JoinBackups()
@@ -87,7 +88,7 @@ namespace SeparationProblem
 
             for (var i = 0; i < experimentsNumder; i++)
             {
-                var pairOfStrings = StringPairFactory.GetPairOfEquivalentStrings(stringLength, numberOfStates - 1);
+                var pairOfStrings = StringPairFactory.GetPairOfEquivalentStrings(stringLength, numberOfStates);
                 var wasSeparated = false;
 
                 var iterations = 0;
@@ -157,5 +158,66 @@ namespace SeparationProblem
         {
             return permutation.Aggregate("", (current, i) => current + (i + " "));
         }
+
+        private static void AllPathsOf()
+        {
+            var len = 37;
+            var vertexes = new List<string> {"0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111"};
+
+            edges = vertexes.ToDictionary(vertex => vertex, vertex => new List<string>());
+
+            foreach(var u in vertexes)
+            {
+                foreach(var v in vertexes)
+                {
+                    if(u.Substring(1) == v.Substring(0, v.Length - 1))
+                        edges[u].Add(v);
+                }
+            }
+
+            pathStack = new Stack<string>();
+            
+            foreach(var vertex in vertexes)
+            {
+                used = new Dictionary<string, bool>();
+                foreach(var v in vertexes)
+                {
+                    used.Add(v, false);
+                }
+                Dfs(vertex, len);
+            }
+        }
+
+        private static void Dfs(string v, int len)
+        {
+            pathStack.Push(v);
+            if(len == 0)
+            {
+                File.AppendAllText("paths.txt", string.Format("{0}\r\n", PathToStr(pathStack.ToList())));
+                pathStack.Pop();
+                return;
+            }
+
+            foreach(var u in edges[v])
+            {
+                Dfs(u, len - 1);
+            }
+
+            pathStack.Pop();
+            return;
+        }
+
+        private static string PathToStr(List<string> path)
+        {
+            var ans = path[0];
+            for (var i = 1; i < path.Count; i++)
+                ans += path[i].Last();
+
+            return ans;
+        }
+
+        private static Stack<string> pathStack;
+        private static Dictionary<string, List<string>> edges;
+        private static Dictionary<string, bool> used;
     }
 }
