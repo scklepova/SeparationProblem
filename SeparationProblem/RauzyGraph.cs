@@ -11,6 +11,7 @@ namespace SeparationProblem
             edges = new Dictionary<string, List<string>>();
             var prevSubstr = word.Substring(0, stretch);
             defaultPath = new List<string> {prevSubstr};
+            vertexCount = new Dictionary<string, int> {{prevSubstr, 1}};
             for(var i = 1; i < word.Length - stretch + 1; i++)
             {
                 var substr = word.Substring(i, stretch);
@@ -20,6 +21,9 @@ namespace SeparationProblem
                     edges[prevSubstr].Add(substr);
 
                 defaultPath.Add(substr);
+                if(!vertexCount.ContainsKey(substr))
+                    vertexCount.Add(substr, 0);
+                vertexCount[substr]++;
                 prevSubstr = substr;
             }
 
@@ -34,6 +38,8 @@ namespace SeparationProblem
                         edges[vertex1].Add(vertex2);
                 }
             }
+
+            givenString = word;
         }
 
         public string GetEquivalentString()
@@ -45,16 +51,16 @@ namespace SeparationProblem
 //            var intervals = new List<string>();
 //            FindAllPaths();
 //            
-//            foreach(var initVertex in edges.Keys.Where(x => x != defaultPath[0]))
-//            {
-//                currentPath = new Stack<string>();
-//                if(TryFindPathOfLength(defaultPath.Count, initVertex))
-//                {
-//                    Console.WriteLine("true");
-//                    intervals = currentPath.ToList();
-//                    break;
-//                }
-//            }      
+            foreach(var initVertex in edges.Keys.Where(x => x != defaultPath[0]))
+            {
+                currentPath = new Stack<string>();
+                if(TryFindPathOfLength(defaultPath.Count, initVertex))
+                {
+                    Console.WriteLine("true");
+                    intervals = currentPath.ToList();
+                    break;
+                }
+            }      
      
 
             if(intervals == null || intervals.Count != defaultPath.Count)
@@ -63,27 +69,77 @@ namespace SeparationProblem
             /**
              */
 
-            if(intervals.Count(x => x == intervals[0]) >= 2)
-            {
-                var s = intervals[0].StartsWith("0") ? "1" + intervals[0].Substring(1) : "0" + intervals[0].Substring(1);
-                if(intervals.Contains(s))
-                    intervals[0] = s;
-            }
-             
-            if (intervals.Count(x => x == intervals.Last()) >= 2)
-            {
-                var s = intervals.Last().Substring(0, intervals[0].Length - 1);
-                s = intervals.Last().EndsWith("0") ? s + "1" : s + "0";
-                if(intervals.Contains(s))
-                    intervals[intervals.Count - 1] = s;
-            }
+//            if(intervals.Count(x => x == intervals[0]) >= 2)
+//            {
+//                var s = intervals[0].StartsWith("0") ? "1" + intervals[0].Substring(1) : "0" + intervals[0].Substring(1);
+//                if(intervals.Contains(s))
+//                    intervals[0] = s;
+//            }
+//             
+//            if (intervals.Count(x => x == intervals.Last()) >= 2)
+//            {
+//                var s = intervals.Last().Substring(0, intervals[0].Length - 1);
+//                s = intervals.Last().EndsWith("0") ? s + "1" : s + "0";
+//                if(intervals.Contains(s))
+//                    intervals[intervals.Count - 1] = s;
+//            }
 
             /**
              */
 
-            var ans = intervals[0];
-            for(var i = 1; i < intervals.Count; i++)
+            //запись пути
+//            var ans = intervals[0];
+//            for(var i = 1; i < intervals.Count; i++)
+//                ans += intervals[i].Last();
+
+            var ans = intervals[defaultPath.Count - 1];
+            for (var i = defaultPath.Count - 2; i >= 0; i--)
                 ans += intervals[i].Last();
+
+            return ans;
+        }
+
+        //На самом деле не все, а только по одному из каждой вершины, потому что дфс возвращает первый попавшийся
+        public List<string> GetAllEquivalentStrings()
+        {
+            var eqStrs = new List<string>();
+           
+            foreach (var initVertex in edges.Keys)
+            {
+                currentPath = new Stack<string>();
+                if (TryFindPathOfLength(defaultPath.Count, initVertex))
+                {
+//                    Console.WriteLine("true");
+                    var eqStr = GetStrFromStack(currentPath.ToList());
+                    if(!eqStrs.Contains(eqStr) && givenString != eqStr)
+                        eqStrs.Add(eqStr);
+                }
+            }
+
+            return eqStrs;
+        }
+
+        public List<string> GetEquivalentStringsBySwappingCycles()
+        {
+            var intervals = SwapCycles(defaultPath);
+            var s = GetStrFromStack(intervals);
+            return new List<string>() {s};
+        } 
+
+        private string GetStrFromStack(List<string> stack)
+        {
+            var ans = stack[stack.Count - 1];
+            for (var i = stack.Count - 2; i >= 0; i--)
+                ans += stack[i].Last();
+
+            return ans;
+        }
+
+        private string GetStrFromList(List<string> list)
+        {
+            var ans = list[0];
+            for (var i = 1; i < list.Count; i++)
+                ans += list[i].Last();
 
             return ans;
         }
@@ -92,7 +148,8 @@ namespace SeparationProblem
         {
             if(length == 0)
             {
-                return edges.Keys.All(x => currentPath.Contains(x));
+//                return edges.Keys.All(x => currentPath.Contains(x));
+                return true;
             }
 
 //            if(length <= preLength)
@@ -113,10 +170,73 @@ namespace SeparationProblem
 //                }
 //            }
 
-            currentPath.Push(initV);    
+            if (vertexCount[initV] == 0)
+                return false;
+            currentPath.Push(initV);
+            vertexCount[initV]--;
             if (edges[initV].Any(v => TryFindPathOfLength(length - 1, v)))
                 return true;
             currentPath.Pop();
+            vertexCount[initV]++;
+            return false;
+        }
+
+        private void TryFindAllPathOfLength(int length, string initV)
+        {
+            if (length == 0)
+            {
+                return;
+            }
+
+            if (vertexCount[initV] == 0)
+                return;
+            currentPath.Push(initV);
+            vertexCount[initV]--;
+            foreach (var v in edges[initV])
+            {
+                TryFindAllPathOfLength(length - 1, v);
+            }
+            
+            currentPath.Pop();
+            vertexCount[initV]++;
+            return;
+        }
+
+        private bool TryFindPathOfLength_RandomVersion(int length, string initV)
+        {
+            if (length == 0)
+            {
+                return true;
+            }
+
+            if (vertexCount[initV] == 0)
+                return false;
+            currentPath.Push(initV);
+            vertexCount[initV]--;
+
+            var possibleWays = edges[initV];
+            bool f = false;
+
+            if (possibleWays.Count == 1)
+                f = TryFindPathOfLength_RandomVersion(length - 1, possibleWays[0]);
+            else
+            {
+                var rnd = RandomFactory.GetNext(possibleWays.Count);
+                if (rnd == 1)
+                {
+                    f = TryFindPathOfLength_RandomVersion(length - 1, possibleWays[1]);
+                    if(!f)
+                        f = TryFindPathOfLength_RandomVersion(length - 1, possibleWays[0]);
+                }
+                else
+                    f = possibleWays.Any(v => TryFindPathOfLength_RandomVersion(length - 1, v));
+            }
+
+            if (f)
+                return true;
+
+            currentPath.Pop();
+            vertexCount[initV]++;
             return false;
         }
 
@@ -168,106 +288,6 @@ namespace SeparationProblem
             }
 
             return counter;
-        }
-
-        public List<string> TryGetEulerPath(string startV)
-        {
-            var usedEdges = new Dictionary<string, Dictionary<string, bool>>();
-            var stack = new Stack<string>();
-            var eulerPath = new List<string>();
-            stack.Push(startV);
-            while(stack.Count > 0)
-            {
-                var w = stack.Peek();
-                foreach(var u in edges[w])
-                {
-                    if(!usedEdges.ContainsKey(w) || !usedEdges[w].ContainsKey(u) || !usedEdges[w][u])
-                    {
-                        stack.Push(u);
-                        if(!usedEdges.ContainsKey(w))
-                            usedEdges.Add(w, new Dictionary<string, bool>());
-                        if(!usedEdges[w].ContainsKey(u))
-                            usedEdges[w].Add(u, true);
-                        usedEdges[w][u] = true;
-                        break;
-                    }
-                }
-                if(w == stack.Peek())
-                {
-                    stack.Pop();
-                    eulerPath.Add(w);
-                }
-            }
-
-            return eulerPath;
-        }
-
-        private List<List<string>> GetPathIntervals(List<string> path)
-        {
-            var lastPos = edges.Keys.ToDictionary(v => v, v => -1);
-            var k = 0;
-            var lastCycleIndex = 0;
-            var intervals = new List<List<string>>();
-            while(k < path.Count)
-            {
-                if(lastPos[path[k]] >= lastCycleIndex)
-                {
-                    var cycle = new List<string>();
-                    for(var i = lastPos[path[k]]; i <= k; i++)
-                        cycle.Add(path[i]);
-
-                    if(lastCycleIndex < k - cycle.Count + 1)
-                    {
-                        var interval = new List<string>();
-                        for(var i = lastCycleIndex; i <= k; i++)
-                            interval.Add(path[i]);
-                        intervals.Add(interval);
-                    }
-                    intervals.Add(cycle);
-                    lastCycleIndex = k;
-                }
-
-                lastPos[path[k]] = k;
-                k++;
-            }
-
-            if(lastCycleIndex < k - 1)
-            {
-                var interval = new List<string>();
-                for(var i = lastCycleIndex; i <= k - 1; i++)
-                    interval.Add(path[i]);
-                intervals.Add(interval);
-            }
-
-            return intervals;
-        }
-
-        private List<string> SwapCycles2(List<List<string>> intervals)
-        {
-            if(intervals.Count == 1)
-                return null;
-
-            var ans = new List<string>();
-            var j = 0;
-            while(j < intervals.Count)
-            {
-                if(!IsCycle(intervals[j]))
-                    AddInterval(ans, intervals[j]);
-                else
-                {
-                    if(j + 1 < intervals.Count && intervals[j].First() == intervals[j + 1].First() && IsCycle(intervals[j + 1]))
-                    {
-                        AddInterval(ans, intervals[j + 1]);
-                        AddInterval(ans, intervals[j]);
-                        j++;
-                    }
-                    else
-                        AddInterval(ans, intervals[j]);
-                }
-                j++;
-            }
-
-            return ans;
         }
 
         private List<string> SwapCycles(List<string> path)
@@ -331,35 +351,15 @@ namespace SeparationProblem
             return path.First() == path.Last();
         }
 
-        private List<string> FindEulerPath(string initVertex)
-        {
-            var graph = new Dictionary<string, List<string>>(edges);
-            var stack = new Stack<string>();
-            var ans = new List<string>();
-            stack.Push(initVertex);
-            while(stack.Count > 0)
-            {
-                var v = stack.Peek();
-                if(graph[v].Count == 0)
-                {
-                    ans.Add(v);
-                    stack.Pop();
-                }
-                else
-                {
-                    stack.Push(graph[v][0]);
-                    graph[v].RemoveAt(0);
-                }
-            }
-
-            return ans;
-        }
-
         private readonly Dictionary<string, List<string>> edges;
         private readonly List<string> defaultPath;
         private Stack<string> currentPath;
         private List<string> currentPath1;
         private Dictionary<string, List<List<string>>[]> allPaths;
         private int preLength = 7;
+        private Dictionary<string, int> vertexCount;
+        private Dictionary<string, int> vertexCountCopy;
+        private string givenString;
+        private List<List<string>> paths;
     }
 }

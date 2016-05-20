@@ -27,5 +27,19 @@ namespace SeparationProblem.Tests
             var s2 = RandomFactory.GetRandomString(40);
             Assert.AreNotEqual(s1, s2);
         }
+
+        [Test]
+        public void TestGetNext()
+        {
+            var max = 1;
+            for (var i = 0; i < 1000; i++)
+            {
+                var r = RandomFactory.GetNext(max + 1);
+                if(RandomFactory.GetNext(max) == max)
+                    Assert.Pass();
+            }
+
+            Assert.Fail();
+        }
     }
 }

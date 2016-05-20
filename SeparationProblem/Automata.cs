@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SeparationProblem
 {
@@ -10,6 +11,32 @@ namespace SeparationProblem
             this.n = n;
             this.initState = initState;
             this.transitions = transitions;
+        }
+
+        public Automata(int n, int initState, string cyclePermutation0, string cyclePermutation1)
+        {
+            this.n = n;
+            this.initState = initState;
+            transitions = new[]
+            {
+                GetTransitionsFromCyclePermutation(cyclePermutation0, n),
+                GetTransitionsFromCyclePermutation(cyclePermutation1, n)
+            };
+        }
+
+        private int[] GetTransitionsFromCyclePermutation(string cyclePermutation, int n)
+        {
+            var trans = new int[n];
+            for (int i = 0; i < n; i++)
+                trans[i] = i;
+            var cycles = cyclePermutation.Split(')').Where(x => x != "").Select(x => x.Substring(1));
+            foreach (var cycle in cycles)
+            {
+                for (var i = 0; i < cycle.Length - 1; i++)
+                    trans[cycle[i] - '0' - 1] = cycle[i + 1] - '0' - 1;
+                trans[cycle.Last() - '0' - 1] = cycle[0] - '0' - 1;
+            }
+            return trans;
         }
 
         public int LastState(string word)

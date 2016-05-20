@@ -9,10 +9,17 @@ namespace SeparationProblem
     {
         static void Main(string[] args)
         {
+//            OpenFile();
+//            SelectOnlyWordsWithEqualCountOfZeroAnd1();
+//            Words2();
+//            ConvertStringsToNums();
+//            WordsWithoutThreeDigitsInARow2();
 //            JoinBackups();
             RandomPermutationAutomatas();
             AllPermutationAutomatas();
 //            AllPathsOf();
+//            FilterHard();
+//            AllPermutationAutomatasWithExactPairs();
         }
 
         public static void JoinBackups()
@@ -31,52 +38,73 @@ namespace SeparationProblem
             File.WriteAllLines("joined_backup.txt", hardlySeparated.Select(x => string.Format("{0} {1}", x.Item1, x.Item2)));
         }
 
-        public static void AllPermutationAutomatas()
+        public static void AllPermutationAutomatasWithExactPairs()
         {
-            var permutations = AllPermutations();
-            var hardlySeparatedPairs = File.ReadAllLines("separation.txt").Select(x => new Tuple<string, string>(x.Split(' ')[0], x.Split(' ')[1])).ToList();
-            var separated = new Dictionary<Tuple<string,string>, bool>();
+            var automatas = PermutationAutomataFactory.GetAllNonIsomorphicPermutationAutomatas5();
+            var hardPairs = new List<Tuple<string, string>>();
+            var lines = File.ReadAllLines("EqualCountnoThreeInARow24.txt");
 
-            foreach(var permutation0 in permutations)
+            foreach (var line0 in lines)
             {
-                foreach(var permutation1 in permutations)
+                foreach (var line1 in lines)
                 {
-                    for(var initState = 0; initState <= 4; initState++)
+                    var line = line0 + line1;                  
+                    var pair = new Tuple<string, string>(line, new string(line.Reverse().ToArray()));
+                    if(pair.Item1 == pair.Item2)
+                        continue;
+                    var separated = false;
+                    foreach (var automata in automatas)
                     {
-                        var automata = new Automata(5, initState, new []{permutation0, permutation1});
-                        foreach(var pair in hardlySeparatedPairs.Where(x => !separated.ContainsKey(x) || !separated[x]))
+                        if (automata.Separates(pair))
                         {
-                            if(automata.Separates(pair))
-                            {
-                                if(!separated.ContainsKey(pair))
-                                    separated.Add(pair, true);
-                                else
-                                    separated[pair] = true;
-                            }
+                            separated = true;
+                            break;
                         }
                     }
+                    if (!separated)
+                        hardPairs.Add(pair);
                 }
             }
 
-            var hardPairs = hardlySeparatedPairs.Where(x => !separated[x]);
             File.WriteAllLines("hard.txt", hardPairs.Select(pair => string.Format("{0} {1}", pair.Item1, pair.Item2)));
         }
 
-        public static List<int[]> AllPermutations()
+        public static void AllPermutationAutomatas()
         {
-            var permutations = new List<int[]>();
-            var permutation = new []{0, 1, 2, 3, 4};
-            while(permutation != null)
+            var automatas = PermutationAutomataFactory.GetAllNonIsomorphicPermutationAutomatas5();
+            var streamReader = new StreamReader(File.OpenRead("separation.txt"));
+            
+//            var hardlySeparatedPairs = File.ReadAllLines("separation.txt").Select(x => new Tuple<string, string>(x.Split(' ')[0], x.Split(' ')[1])).ToList();
+            var hardPairs = new List<Tuple<string, string>>();
+
+            while(!streamReader.EndOfStream)
             {
-                permutations.Add(permutation);
-                permutation = NextPermutation(permutation);
+                var line = streamReader.ReadLine();
+                if (line != null)
+                {
+                    var words = line.Split(' ');
+                    var pair = new Tuple<string, string>(words[0], words[1]);
+                    var separated = false;
+                    foreach (var automata in automatas)
+                    {
+                        if (automata.Separates(pair))
+                        {
+                            separated = true;
+                            break;
+                        }
+                    }
+                    if(!separated)
+                        hardPairs.Add(pair);
+                }
             }
 
-            return permutations;
+            File.WriteAllLines("hard.txt", hardPairs.Select(pair => string.Format("{0} {1}", pair.Item1, pair.Item2)));
         }
-
+        
         public static void RandomPermutationAutomatas()
         {
+            var lines = File.ReadAllLines("EqualCountnoThreeInARow24.txt");
+
             var file = new FileInfo("separation.txt");
             file.Delete();
 
@@ -84,18 +112,26 @@ namespace SeparationProblem
 
             const int numberOfStates = 5;
             const int stringLength = 40;
-            const int experimentsNumder = 100000;
+            const int experimentsNumder = 1000000;
 
             for (var i = 0; i < experimentsNumder; i++)
             {
-                var pairOfStrings = StringPairFactory.GetPairOfEquivalentStrings(stringLength, numberOfStates);
-                var wasSeparated = false;
+                Tuple<string, string> pairOfStrings;
+                while (true)
+                {
+                    var randLine = lines[RandomFactory.GetNext(lines.Count())] +
+                                   lines[RandomFactory.GetNext(lines.Count())];
+                    pairOfStrings = new Tuple<string, string>(randLine, new string(randLine.Reverse().ToArray()));
+                    if (pairOfStrings.Item1 != pairOfStrings.Item2)
+                        break;
+                }
 
+                var wasSeparated = false;
                 var iterations = 0;
-                while (!wasSeparated && iterations < 10)
+                while (!wasSeparated && iterations < 20)
                 {
                     var automata = PermutationAutomataFactory.GetRandomPermutationAutomata(numberOfStates);
-                    if (automata.LastState(pairOfStrings.Item1) != automata.LastState(pairOfStrings.Item2))
+                    if (automata.Separates(pairOfStrings))
                     {
                         wasSeparated = true;
                     }
@@ -107,52 +143,11 @@ namespace SeparationProblem
                     streamWriter.WriteLine("{0} {1}", pairOfStrings.Item1, pairOfStrings.Item2);
                 }
 
-                Console.WriteLine(i);
             }
-
             streamWriter.Close();
         }
 
-        private static int[] NextPermutation(IEnumerable<int> permutation)
-        {
-            var array = permutation.ToArray();
-            // Find longest non-increasing suffix
-            int i = array.Length - 1;
-            while (i > 0 && array[i - 1] >= array[i])
-                i--;
-            // Now i is the head index of the suffix
-
-            // Are we at the last permutation already?
-            if (i <= 0)
-                return null;
-
-            // Let array[i - 1] be the pivot
-            // Find rightmost element that exceeds the pivot
-            int j = array.Length - 1;
-            while (array[j] <= array[i - 1])
-                j--;
-            // Now the value array[j] will become the new pivot
-            // Assertion: j >= i
-
-            // Swap the pivot with j
-            int temp = array[i - 1];
-            array[i - 1] = array[j];
-            array[j] = temp;
-
-            // Reverse the suffix
-            j = array.Length - 1;
-            while (i < j)
-            {
-                temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-                i++;
-                j--;
-            }
-
-            // Successfully computed the next permutation
-            return array;
-        }
+        
 
         private static string PermutationToString(List<int> permutation)
         {
@@ -214,6 +209,156 @@ namespace SeparationProblem
                 ans += path[i].Last();
 
             return ans;
+        }
+
+        public static void WordsWithoutThreeDigitsInARow2()
+        {
+            var filename = "noThreeInARow.txt";
+            var lines = File.ReadAllLines(filename);
+            var newLines = new List<string>();
+
+            foreach (var line in lines)
+            {
+                if (line != null)
+                {
+                    if (!line.EndsWith("00"))
+                        newLines.Add(line + "0");
+                    if (!line.EndsWith("11"))
+                        newLines.Add(line + "1");
+                }
+            }
+
+            File.WriteAllLines(filename, newLines);
+        }
+
+        public static void WordsWithoutThreeDigitsInARow()
+        {
+            var filename = "noThreeInARow.txt";
+            var streamReader = new StreamReader(File.OpenRead(filename));
+            var streamWriter = new StreamWriter(File.OpenWrite(filename + "Write"));
+
+            while(!streamReader.EndOfStream)
+            {
+                var line = streamReader.ReadLine();
+                if (line != null)
+                {
+                    if (!line.EndsWith("00"))
+                        streamWriter.WriteLine(line + "0");
+                    if (!line.EndsWith("11"))
+                        streamWriter.WriteLine(line + "1");
+                }
+            }
+        }
+
+        public static void ConvertStringsToNums()
+        {
+            var filename = "noThreeInARow.txt";
+            var streamReader = new StreamReader(File.OpenRead(filename));
+            var streamWriter = new StreamWriter(File.OpenWrite("Nums" + filename));
+
+            while (!streamReader.EndOfStream)
+            {
+                var line = streamReader.ReadLine();
+                if (line != null)
+                {
+                    var num = StrToLong(line);
+                    streamWriter.WriteLine(num);
+                }
+            }
+        }
+
+        public static void Words2()
+        {
+            var filename = "noThreeInARow.txt";
+            var streamReader = new StreamReader(File.OpenRead(filename));
+            var streamWriter = new StreamWriter(File.OpenWrite("Nums" + filename));
+
+            while (!streamReader.EndOfStream)
+            {
+                var line = streamReader.ReadLine();
+                if (line != null)
+                {
+                    var str = LongToStr(long.Parse(line));
+                    if (!str.EndsWith("00"))
+                    {
+                        var num = StrToLong(str + "0");
+                        streamWriter.WriteLine(num);
+                    }
+                    if (!str.EndsWith("11"))
+                    {
+                        var num = StrToLong(str + "1");
+                        streamWriter.WriteLine(num);
+                    }       
+                }
+            }
+        }
+
+        private static long StrToLong(string str)
+        {
+            var num = 0;
+            foreach (var digit in str)
+            {
+                num = num*2 + (digit - '0');
+            }
+            return num;
+        }
+
+        private static string LongToStr(long num)
+        {
+            var str = "";
+            while (num != 0)
+            {
+                var rem = num%2;
+                str = rem + str;
+                num = num/2;
+            }
+            return str;
+        }
+
+        private static void SelectOnlyWordsWithEqualCountOfZeroAnd1()
+        {
+            var filename = "noThreeInARow24.txt";
+            var streamReader = new StreamReader(File.OpenRead(filename));
+            var streamWriter = new StreamWriter(File.OpenWrite("EqualCount" + filename));
+            while (!streamReader.EndOfStream)
+            {
+                var line = streamReader.ReadLine();
+                if (line != null)
+                {
+                    if (EqualCountOf0And1(line)) 
+                        streamWriter.WriteLine(line);
+                }
+            }
+        }
+
+        private static bool EqualCountOf0And1(string line)
+        {
+            var count0 = line.Count(x => x == '0');
+            var count1 = line.Count(x => x == '1');
+
+            return count0 == count1;
+        }
+
+        private static void OpenFile()
+        {
+            var filename = "EqualCountnoThreeInARow36.txt";
+            var lines = File.ReadAllLines(filename);
+
+            lines.Count();
+        }
+
+        private static void FilterHard()
+        {
+            var filename = "hard.txt";
+            var pairs = File.ReadAllLines(filename).Select(x => x.Split(' ')).ToArray();
+            var diffs = new List<string[]>();
+            foreach (var pair in pairs)
+            {
+                if(pair[0] != pair[1])
+                    diffs.Add(pair);
+            }
+
+            File.WriteAllLines(filename, diffs.Select(x => string.Format("{0} {1}", x[0], x[1])));
         }
 
         private static Stack<string> pathStack;
