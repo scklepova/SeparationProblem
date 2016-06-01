@@ -45,6 +45,7 @@ namespace SeparationProblem
             foreach (var c in word)
             {
                 currentState = Transite(currentState, c);
+//                Console.Write(currentState);
                 if (StateNotValid(currentState))
                     throw new Exception(string.Format("Invalid state {0}", currentState));
             }
@@ -56,7 +57,12 @@ namespace SeparationProblem
             return LastState(pair.Item1) != LastState(pair.Item2);
         }
 
-        private int Transite(int state, char symbol)
+        public bool Separates(string item1, string item2)
+        {
+            return LastState(item1) != LastState(item2);
+        }
+
+        public int Transite(int state, char symbol)
         {
             return transitions[symbol - '0'][state];
         }

@@ -45,7 +45,7 @@ namespace SeparationProblem
         public string GetEquivalentString()
         {
             var intervals = defaultPath;
-//            var intervals = SwapCycles(defaultPath);
+//            var intervals = SwapAllPossibleCycles(defaultPath);
 
 
 //            var intervals = new List<string>();
@@ -121,9 +121,9 @@ namespace SeparationProblem
 
         public List<string> GetEquivalentStringsBySwappingCycles()
         {
-            var intervals = SwapCycles(defaultPath);
-            var s = GetStrFromStack(intervals);
-            return new List<string>() {s};
+            var intervals = SwapAllPossibleCycles(defaultPath);
+            var strs = intervals.Select(GetStrFromStack).ToList();
+            return new List<string>(strs);
         } 
 
         private string GetStrFromStack(List<string> stack)
@@ -290,38 +290,43 @@ namespace SeparationProblem
             return counter;
         }
 
-        private List<string> SwapCycles(List<string> path)
+        private List<List<string>> SwapAllPossibleCycles(List<string> path)
         {
-            var cycleVertex = "";
+            var allSwapped = new List<List<string>>();
+            var used = new Dictionary<string, bool>();
             foreach(var vertex in path)
             {
-                if(path.Count(x => x == vertex) >= 3)
-                {
-                    cycleVertex = vertex;
-                    break;
-                }
+                if(!used.ContainsKey(vertex) || used[vertex] == false)
+                    if(path.Count(x => x == vertex) >= 3)
+                    {
+                        allSwapped.Add(SwapCycleStartsAt(path, vertex));
+                    }
+                if(!used.ContainsKey(vertex))
+                    used.Add(vertex, true);
             }
 
-            if(cycleVertex == "")
-                return null;
+            return allSwapped;
+        }
 
+        private List<string> SwapCycleStartsAt(List<string> path, string cycleVertex)
+        {
             var i = 0;
             var ans = new List<string>();
-            while(path[i] != cycleVertex)
+            while (path[i] != cycleVertex)
             {
                 ans.Add(path[i]);
                 i++;
             }
             var cycleBody1 = new List<string>();
             i++;
-            while(path[i] != cycleVertex)
+            while (path[i] != cycleVertex)
             {
                 cycleBody1.Add(path[i]);
                 i++;
             }
             var cycleBody2 = new List<string>();
             i++;
-            while(path[i] != cycleVertex)
+            while (path[i] != cycleVertex)
             {
                 cycleBody2.Add(path[i]);
                 i++;
@@ -332,7 +337,7 @@ namespace SeparationProblem
             ans.Add(cycleVertex);
             ans.AddRange(cycleBody1);
 
-            while(i < path.Count)
+            while (i < path.Count)
             {
                 ans.Add(path[i]);
                 i++;
