@@ -18,6 +18,17 @@ namespace SeparationProblem
             }
         }
 
+        public static Automata GetRandomAutomata(int n)
+        {
+            while (true)
+            {
+                var transitions = new[] { RandomFactory.GetRandomArray(n, n), RandomFactory.GetRandomArray(n, n) };
+                var automata = new Automata(n, RandomFactory.GetNext(n), transitions);
+                if (automata.IsConnected())
+                    return automata;
+            }
+        }
+
         public static IEnumerable<Automata> GetAllPermutationAutomata(int n)
         {
             var permutations = AllPermutations(n);

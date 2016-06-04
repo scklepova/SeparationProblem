@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using NUnit.Framework;
 using SeparationProblem.Extensions;
 
 namespace SeparationProblem
@@ -39,7 +38,10 @@ namespace SeparationProblem
 
 //            PermutationAutomatasForSwappedCyclesStrings();
 //            AddPrefixAndSuffixForNotSeparating();
-            AddPref4();
+//            AddPref4();
+//            FirstSeparatedAutomataNumberForAllEqualities4();
+
+            AllAutomatasVsFilterByRandom();
         }
 
         public static void JoinBackups()
@@ -246,6 +248,67 @@ namespace SeparationProblem
 
             }
             streamWriter.Close();
+        }
+
+        public static List<Tuple<string, string>> FilterPairsByRandomAutomatas(List<Tuple<string, string>> pairs,
+            Func<int, Automata> getRandomAutomata, int numberOfStates, int filterIterationsCount)
+        {
+            var filtered = new List<Tuple<string, string>>();
+            foreach (var pair in pairs)
+            {
+                var separated = false;
+                for (var i = 0; i < filterIterationsCount; i++)
+                {
+                    var automata = getRandomAutomata(numberOfStates);
+                    if (automata.Separates(pair))
+                    {
+                        separated = true;
+                        break;
+                    }
+                }
+
+                if(!separated)
+                    filtered.Add(pair);
+            }
+
+            return filtered;
+        }
+
+        public static void AllAutomatasVsFilterByRandom()
+        {
+            var filename = "totalEqualities4.txt";
+            var n = 5;
+            var sets = AutomataFactory.GetAllSetsOfInt(n);
+            var automatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(n, sets);
+            var lines = File.ReadAllLines(filename);
+            var pairs = new List<Tuple<string, string>>();
+            for (var i = 2; i < 300; i += 3)
+                pairs.Add(lines[i].GetPair());
+            Console.WriteLine(pairs.Count);
+
+            Console.WriteLine("Start hard separating");
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            foreach (var pair in pairs)
+            {
+                FirstSeparatedAutomataNumber(automatas, pair);
+            }
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
+            Console.WriteLine("Start with filtering");
+            stopwatch.Reset();
+
+            stopwatch.Start();
+            var filtered = FilterPairsByRandomAutomatas(pairs, x => AutomataFactory.GetRandomAutomata(n), n, 20);
+            foreach (var pair in filtered)
+            {
+                FirstSeparatedAutomataNumber(automatas, pair);
+            }
+            stopwatch.Stop();
+            Console.WriteLine(filtered.Count);
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
+            Console.WriteLine("End.");
+            Console.ReadKey();
         }
 
         private static void AllPathsOf()
@@ -550,39 +613,41 @@ namespace SeparationProblem
         {
             var filename = "eq4.txt";
             var lines = File.ReadAllLines(filename);
-            var sets = AutomataFactory.GetAllSetsOfInt(6);
+            var sets = AutomataFactory.GetAllSetsOfInt(5);
 //            File.WriteAllLines("sets6.txt", sets.Select(x => x.ToStr()));
-            var automatas = AutomataFactory.GetAllAutomatasWithKnownSets(6, sets);
-            var streamWriter = new StreamWriter(File.OpenWrite("totalEqualities6.txt")) {AutoFlush = true};
+            var automatas = AutomataFactory.GetAllAutomatasWithKnownSets(5, sets);
+            var streamWriter = new StreamWriter(File.OpenWrite("totalEqualities5_2.txt")) {AutoFlush = true};
 //            Console.WriteLine(automatas.Count());
-//            var critAutos = new List<Automata>()
-//            {
+            var critAutos = new List<Automata>()
+            {
+                automatas.ElementAt(5410719)
+                //***
 //                automatas.ElementAt(14849260)
-//
-////                automatas.ElementAt(5182605)
-//
-////                automatas.ElementAt(4661015)
-//
-////                automatas.ElementAt(1523795)
-//
-////                automatas.ElementAt(602385),
-////                automatas.ElementAt(602389),
-////                automatas.ElementAt(602375),
-////                automatas.ElementAt(599250),
-////                automatas.ElementAt(602420),
-////                automatas.ElementAt(599450),
-////                automatas.ElementAt(1147297),
-////                automatas.ElementAt(1086792)
-//            };
+
+//                automatas.ElementAt(5182605)
+
+//                automatas.ElementAt(4661015)
+
+//                automatas.ElementAt(1523795)
+
+//                automatas.ElementAt(602385),
+//                automatas.ElementAt(602389),
+//                automatas.ElementAt(602375),
+//                automatas.ElementAt(599250),
+//                automatas.ElementAt(602420),
+//                automatas.ElementAt(599450),
+//                automatas.ElementAt(1147297),
+//                automatas.ElementAt(1086792)
+            };
 
             var line = lines[0];
-//            var prefix = "010010";
-//            while(true)
-//            {
-//                Console.WriteLine(prefix);
+            var prefix = "";
+            while(true)
+            {
+                Console.WriteLine(prefix);
                 var pair = line.GetPair();
-//                var rev = prefix.GetReverse();
-//                pair = new Tuple<string, string>(prefix + pair.Item1 + rev, prefix + pair.Item2 + rev);
+                var rev = prefix.GetReverse();
+                pair = new Tuple<string, string>(prefix + pair.Item1 + rev, prefix + pair.Item2 + rev);
                 var separated = false;
                 var automataCount = 0;
                 foreach (var automata in automatas)
@@ -594,24 +659,24 @@ namespace SeparationProblem
                         break;
                     }
                     automataCount++;
-                    if(automataCount % 10000 == 0)
-                        Console.WriteLine(automataCount);
+//                    if(automataCount % 10000 == 0)
+//                        Console.WriteLine(automataCount);
                 }
 
                 if (!separated)
                 {
                     Console.WriteLine("Success!");
-//                    Console.WriteLine(prefix);
+                    Console.WriteLine(prefix);
                     streamWriter.WriteLine(pair.ToStr());
-//                    break;
+                    break;
                 }
 
 //                do
 //                {
-//                    prefix = prefix.Select(x => x - '0').ToArray().PlusOneIn2ss(prefix.Length - 1).GetString();
+                    prefix = prefix.BinaryPlusOne();
 //                } while (!prefix.HasEqualCountOf0And1());
                 
-//            }
+            }
 
             streamWriter.Close();
             Console.WriteLine("end");
@@ -622,74 +687,101 @@ namespace SeparationProblem
         {
             const string inputFilename = "eq4.txt";
             var pair = File.ReadAllLines(inputFilename)[0].GetPair();
-            var setsOfInt = AutomataFactory.GetAllSetsOfInt(4);
-            var automatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(4, setsOfInt).ToList();
+            var setsOfInt = AutomataFactory.GetAllSetsOfInt(5);
+            var automatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(5, setsOfInt).ToList();
 //            Console.WriteLine(automatas.Count());
             var lastSeparatedAutomataNumber = -2;
             var separatedAutomataNumber = -1;
 
             while (lastSeparatedAutomataNumber < automatas.Count - 1)
             {
-                separatedAutomataNumber = SeparatedAutomataCount(automatas, pair);
+                separatedAutomataNumber = FirstSeparatedAutomataNumber(automatas, pair);
                 if (separatedAutomataNumber >= automatas.Count - 1)
                     break;
 
                 Console.WriteLine("Separated: " + separatedAutomataNumber);
-                if (separatedAutomataNumber <= lastSeparatedAutomataNumber)
+                if (separatedAutomataNumber < lastSeparatedAutomataNumber)
                 {
                     Console.WriteLine("Crash!");
                     break;
                 }
 
                 var prefix = "0";
+                var suffix = "0";
                 var hardAutomata = automatas.ElementAt(separatedAutomataNumber);
                 var goodPrefixes = new List<string>();
+                var goodSuffixes = new List<string>();
 
                 var maxSeparated = 0;
                 var maxprefix = "";
+                var maxSuffix = "";
                 var iter = 0;
                 while (maxSeparated <= separatedAutomataNumber)
                 {
                     Console.WriteLine(iter);
                     while (goodPrefixes.Count < 20)
                     {
+                        Console.WriteLine(prefix);
                         if (
-                            !hardAutomata.Separates(prefix + pair.Item1 + prefix.GetReverse(),
-                                prefix + pair.Item2 + prefix.GetReverse()))
-                            goodPrefixes.Add(prefix);
-                        do
+                            !hardAutomata.Separates(prefix + pair.Item1 + suffix,
+                                prefix + pair.Item2 + suffix))
                         {
-                            prefix = prefix.Select(x => x - '0').ToArray().PlusOneIn2ss(prefix.Length - 1).GetString();
-                        } while (!prefix.HasEqualCountOf0And1());
+                            goodPrefixes.Add(prefix);
+                            goodSuffixes.Add(suffix);
+                        }
+//                        do
+//                        {
+                            prefix = prefix.BinaryPlusOne();
+//                        } while (!prefix.HasEqualCountOf0And1());
+                        suffix = prefix.GetReverse();
+//                        var newSuffPref = GetNextPrefixAndSuffix(prefix, suffix, 3);
+//                        prefix = newSuffPref.Item1;
+//                        suffix = newSuffPref.Item2;
+//                        if (prefix.Length > 4)
+//                            break;
                     }
 
 
-                    foreach (var goodPrefix in goodPrefixes)
+                    for(var i = 0; i < goodPrefixes.Count; i++)
                     {
-                        var separated = SeparatedAutomataCount(automatas,
-                            new Tuple<string, string>(goodPrefix + pair.Item1 + goodPrefix.GetReverse(),
-                                goodPrefix + pair.Item2 + goodPrefix.GetReverse()));
+                        var goodPrefix = goodPrefixes[i];
+                        var goodSuffix = goodSuffixes[i];
+                        var separated = FirstSeparatedAutomataNumber(automatas,
+                            new Tuple<string, string>(goodPrefix + pair.Item1 + goodSuffix,
+                                goodPrefix + pair.Item2 + goodSuffix));
                         if (separated > maxSeparated)
                         {
                             maxSeparated = separated;
                             maxprefix = goodPrefix;
+                            maxSuffix = goodSuffix;
+                            if (maxSeparated == automatas.Count)
+                                break;
                         }
                     }
                     iter++;
                 }
 
 
-                pair = new Tuple<string, string>(maxprefix + pair.Item1 + maxprefix.GetReverse(),
-                    maxprefix + pair.Item2 + maxprefix.GetReverse());
+                pair = new Tuple<string, string>(maxprefix + pair.Item1 + maxSuffix,
+                    maxprefix + pair.Item2 + maxSuffix);
+                Console.WriteLine("Prefix: {0} Suffix: {2}  Separated: {1}", maxprefix, maxSeparated, maxSuffix);
                 separatedAutomataNumber = maxSeparated;
                 lastSeparatedAutomataNumber = separatedAutomataNumber;
             }
             
-            var streamWriter = new StreamWriter(File.OpenWrite("totalEqualities5_1.txt")){AutoFlush = true};
+            var streamWriter = new StreamWriter(File.OpenWrite("totalEqualities5_2.txt")){AutoFlush = true};
             streamWriter.WriteLine(pair.ToStr());
             streamWriter.Close();
             Console.WriteLine("end");
             Console.ReadKey();
+        }
+
+        private static Tuple<string, string> GetNextPrefixAndSuffix(string prefix, string suffix, int maxLen)
+        {
+            var newSuffix = suffix.BinaryPlusOne();
+            if (newSuffix.Length > maxLen)
+                return new Tuple<string, string>(prefix.BinaryPlusOne(), "");
+            return new Tuple<string, string>(prefix, newSuffix);
         }
 
         public static void AddPref4()
@@ -697,15 +789,16 @@ namespace SeparationProblem
             var sets = AutomataFactory.GetAllSetsOfInt(4);
             var automatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(4, sets).ToList();
             var pair = File.ReadAllLines("eq4.txt")[0].GetPair();
-            var prefix = "11000000";
-//            var prefix = "000";
+//            var prefix = "11000000";
+            var prefix = "0110";
             var eq = false;
             var suffix = "";
 
-            while (prefix.Length <= 11)
+            while (suffix.Length + prefix.Length <= 12)
             {
-                suffix = "000";              
-                while (suffix.Length <= 11)
+//                suffix = prefix.GetReverse();
+                suffix = "0000";
+                while (suffix.Length + prefix.Length <= 12)
                 {
 
                     var separated = false;
@@ -723,9 +816,13 @@ namespace SeparationProblem
                     if (!separated)
                     {
                         eq = true;
+                        Console.WriteLine("Success!!!");
                         break;
                     }
-                    suffix = suffix.BinaryPlusOne();
+//                    do
+//                    {
+                        suffix = suffix.BinaryPlusOne();
+//                    } while (suffix.HasEqualCountOf0And1());
                 }
 
                 if (eq)
@@ -733,7 +830,11 @@ namespace SeparationProblem
                     Console.WriteLine("Success!!!");
                     break;
                 }
-                prefix = prefix.BinaryPlusOne();
+//                do
+//                {
+                    prefix = prefix.BinaryPlusOne();
+//                } while (prefix.HasEqualCountOf0And1());
+                suffix = "0000";
             }
 
             Console.WriteLine("end");
@@ -743,7 +844,7 @@ namespace SeparationProblem
             Console.ReadKey();
         }
 
-        public static int SeparatedAutomataCount(List<Automata> automatas, Tuple<string, string> pair )
+        public static int FirstSeparatedAutomataNumber(IEnumerable<Automata> automatas, Tuple<string, string> pair )
         {
             var separated = false;
             var automataCount = 0;
@@ -852,6 +953,34 @@ namespace SeparationProblem
 
             logWriter.Close();
             File.WriteAllLines(filename, equalities.Select(x => x.ToStr()));
+        }
+
+        public static void FirstSeparatedAutomataNumberForAllEqualities4()
+        {
+            var filename = "totalEqualities4_4.txt";
+            var lines = File.ReadAllLines(filename);
+            var sets = AutomataFactory.GetAllSetsOfInt(5);
+            var automatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(5, sets);
+            var streamWriter = new StreamWriter(File.OpenWrite("firstSeparatedAutomataLog_2.txt")) {AutoFlush = true};
+            var maxSeparatedPair = "";
+            var maxSep = 0;
+            for (var i = 2; i < lines.Count(); i += 3)
+            {
+                var line = lines[i];
+                var firstSeparated = FirstSeparatedAutomataNumber(automatas, line.GetPair());
+                streamWriter.WriteLine("{1} separated {0}", line, firstSeparated);
+                Console.WriteLine("{1} separated {0}", line, firstSeparated);
+                if (firstSeparated > maxSep)
+                {
+                    maxSep = firstSeparated;
+                    maxSeparatedPair = line;
+                }
+            }
+            streamWriter.WriteLine("Max: {0} separated {1}", maxSep, maxSeparatedPair);
+
+            Console.WriteLine("The end");
+            streamWriter.Close();
+            Console.ReadKey();
         }
 
         public void EqualitiesForPermutationAutomatas()

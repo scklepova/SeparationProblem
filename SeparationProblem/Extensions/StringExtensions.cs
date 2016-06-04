@@ -53,6 +53,8 @@ namespace SeparationProblem.Extensions
 
         public static string BinaryPlusOne(this string line)
         {
+            if (line == "")
+                return "0";
             return  line.Select(x => x - '0').ToArray().PlusOneIn2ss(line.Length - 1).GetString();
         }
     }

@@ -35,7 +35,7 @@ namespace SeparationProblem.Tests
             for (var i = 0; i < 1000; i++)
             {
                 var r = RandomFactory.GetNext(max + 1);
-                if(RandomFactory.GetNext(max) == max)
+                if(RandomFactory.GetNext(max + 1) == max)
                     Assert.Pass();
             }
 

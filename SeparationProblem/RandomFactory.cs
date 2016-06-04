@@ -14,6 +14,14 @@ namespace SeparationProblem
             return a;
         }
 
+        public static int[] GetRandomArray(int maxValue, int n)
+        {
+            var a = new int[n];
+            for (var i = 0; i < n; i++)
+                a[i] = random.Next(maxValue);
+            return a;
+        }
+
         public static int[] GetRandomPermutation(int n)
         {
             var a = Enumerable.Range(0, n).ToArray();
@@ -25,7 +33,7 @@ namespace SeparationProblem
             return a;
         }
 
-        public static int GetNext(int maxValue)
+        public static int GetNext(int maxValue) // выдает значение меньше макс вэл
         {
             return random.Next(maxValue);
         }
