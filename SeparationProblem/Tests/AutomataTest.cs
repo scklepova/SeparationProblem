@@ -25,5 +25,12 @@ namespace SeparationProblem.Tests
             Assert.True(automatas.Any(x => x.Separates(sep)));
             Assert.True(!automatas.Any(x => x.Separates(equality)));
         }
+
+        [Test]
+        public void TestGetAllPermutationAutomatas()
+        {
+            var automatas = AutomataFactory.GetAllPermutationAutomata(6);
+            Assert.AreEqual(6*720*720, automatas.Count());
+        }
     }
 }

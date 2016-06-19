@@ -159,7 +159,11 @@ namespace SeparationProblem
                 {
                     if(!(isPermutation[set0] && isPermutation[set1]))
                         for (var initState = 0; initState < n; initState++)
-                            yield return new Automata(n, initState, new[] { set0, set1 });
+                        {
+                            var automata = new Automata(n, initState, new[] {set0, set1});
+                            if (automata.IsConnected())
+                                yield return automata;
+                        }
                 }
             }
 //            return list;

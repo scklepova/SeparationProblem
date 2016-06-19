@@ -57,5 +57,16 @@ namespace SeparationProblem.Extensions
                 return "0";
             return  line.Select(x => x - '0').ToArray().PlusOneIn2ss(line.Length - 1).GetString();
         }
+
+        public static int Count1(this string s)
+        {
+            var c = 0;
+            foreach (var sym in s)
+            {
+                if (sym == '1')
+                    c++;
+            }
+            return c;
+        }
     }
 }

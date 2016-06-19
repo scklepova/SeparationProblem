@@ -30,5 +30,14 @@ namespace SeparationProblem.Extensions
             }
             return false;
         }
+
+        public static int CountStartingFrom(this List<string> list, string toFind, int position)
+        {
+            var c = 0;
+            for(var i = position; i < list.Count; i++)
+                if (list[i] == toFind)
+                    c++;
+            return c;
+        }
     }
 }

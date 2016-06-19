@@ -34,7 +34,33 @@ namespace SeparationProblem
             eqString = graphRauzy.GetEquivalentStringsBySwappingCycles();
             //                Console.WriteLine("------------------------------");
             
-            return eqString.Select(x => new Tuple<string, string>(randomStr, x)).ToList();
+            return eqString.Where(x => x != randomStr).Select(x => new Tuple<string, string>(randomStr, x)).ToList();
+        }
+
+//        public static Tuple<string, string> GetPairOfEquivalentStrings_OldVersion(int length, int stretch)
+//        {
+//            string eqString = null;
+//            string randomStr = null;
+//            while (eqString == null || eqString == randomStr)
+//            {
+//                randomStr = RandomFactory.GetRandomString(length);
+//                var graphRauzy = new RauzyGraph(randomStr, stretch);
+//                eqString = graphRauzy.GetEquivalentString_OldVersion();
+//            }
+//            return new Tuple<string, string>(randomStr, eqString);
+//        }
+
+        public static Tuple<string, string> GetPairOfEquivalentStringsDifferentAtTheEdges(int stringLength, int stretch)
+        {
+            string eqString = null;
+            string randomStr = null;
+            while (eqString == null || eqString == randomStr)
+            {
+                randomStr = RandomFactory.GetRandomString(stringLength);
+                var graphRauzy = new RauzyGraph(randomStr, stretch);
+                eqString = graphRauzy.GetEquivalentStringWithDiffAtTheEdges();
+            }
+            return new Tuple<string, string>(randomStr, eqString);
         }
     }
 }

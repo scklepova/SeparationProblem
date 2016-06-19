@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SeparationProblem.Extensions;
 
 namespace SeparationProblem
 {
@@ -122,7 +123,7 @@ namespace SeparationProblem
         public List<string> GetEquivalentStringsBySwappingCycles()
         {
             var intervals = SwapAllPossibleCycles(defaultPath);
-            var strs = intervals.Select(GetStrFromStack).ToList();
+            var strs = intervals.Select(GetStrFromList).ToList();
             return new List<string>(strs);
         } 
 
@@ -294,12 +295,13 @@ namespace SeparationProblem
         {
             var allSwapped = new List<List<string>>();
             var used = new Dictionary<string, bool>();
-            foreach(var vertex in path)
+            for(var i = 0; i < path.Count; i++)
             {
+                var vertex = path[i];
                 if(!used.ContainsKey(vertex) || used[vertex] == false)
                     if(path.Count(x => x == vertex) >= 3)
                     {
-                        allSwapped.Add(SwapCycleStartsAt(path, vertex));
+                        allSwapped.Add(SwapCycleStartsAt(path, i));
                     }
                 if(!used.ContainsKey(vertex))
                     used.Add(vertex, true);
@@ -308,8 +310,108 @@ namespace SeparationProblem
             return allSwapped;
         }
 
-        private List<string> SwapCycleStartsAt(List<string> path, string cycleVertex)
+        private List<string> SwapCyclesAtTheBeginingAndTheEnd(List<string> path)
         {
+            var swapped = new List<string>();
+            for(var i = 0; i < path.Count; i++)
+            {
+                if (path.CountStartingFrom(path[i], i) >= 3)
+                {
+                    swapped = SwapCycleStartsAt(path, i);
+                    break;
+                }
+            }
+
+            for (var i = swapped.Count - 1; i >= 0; i--)
+            {
+                var c = 1;
+                for (var j = i - 1; j >= 0; j--)
+                {
+                    if (swapped[j] == swapped[i])
+                        c++;
+                    if (c == 3)
+                    {
+                        swapped = SwapCycleStartsAt(swapped, j);
+                        break;
+                    }
+                }
+            }                 
+
+            return swapped;
+        }
+
+        public string GetEquivalentStringWithDiffAtTheEdges()
+        {
+            return GetStrFromList(SwapCyclesAtTheBeginingAndTheEnd(defaultPath));
+        }
+
+        private List<string> SwapCycleStartsAt(List<string> path, int position)
+        {
+            var i = 0;
+            var cycleVertex = path[position];
+            var ans = new List<string>();
+            while (i < position)
+            {
+                ans.Add(path[i]);
+                i++;
+            }
+            var cycleBody1 = new List<string>();
+            i++;
+            while (path[i] != cycleVertex)
+            {
+                cycleBody1.Add(path[i]);
+                i++;
+            }
+            var cycleBody2 = new List<string>();
+            i++;
+            if (i < path.Count)
+            {
+                while (path[i] != cycleVertex)
+                {
+                    cycleBody2.Add(path[i]);
+                    i++;
+                }
+            }
+
+            ans.Add(cycleVertex);
+            ans.AddRange(cycleBody2);
+            ans.Add(cycleVertex);
+            ans.AddRange(cycleBody1);
+
+            while (i < path.Count)
+            {
+                ans.Add(path[i]);
+                i++;
+            }
+
+            return ans;
+        }
+
+        private void AddInterval(List<string> fullPath, List<string> interval)
+        {
+            fullPath.AddRange(Enumerable.Range(1, interval.Count - 1).Select(i => interval[i]));
+        }
+
+        private bool IsCycle(List<string> path)
+        {
+            return path.First() == path.Last();
+        }
+
+        private List<string> SwapCycles_OldVersion(List<string> path)
+        {
+            var cycleVertex = "";
+            foreach (var vertex in path)
+            {
+                if (path.Count(x => x == vertex) >= 3)
+                {
+                    cycleVertex = vertex;
+                    break;
+                }
+            }
+
+            if (cycleVertex == "")
+                return null;
+
             var i = 0;
             var ans = new List<string>();
             while (path[i] != cycleVertex)
@@ -346,15 +448,22 @@ namespace SeparationProblem
             return ans;
         }
 
-        private void AddInterval(List<string> fullPath, List<string> interval)
-        {
-            fullPath.AddRange(Enumerable.Range(1, interval.Count - 1).Select(i => interval[i]));
-        }
-
-        private bool IsCycle(List<string> path)
-        {
-            return path.First() == path.Last();
-        }
+//        public string GetEquivalentString_OldVersion()
+//        {
+//            var cycleVertex = "";
+//            foreach(var vertex in defaultPath)
+//                if (defaultPath.Count(x => x == vertex) >= 3)
+//                {
+//                    cycleVertex = vertex;
+//                    break;
+//                }
+//            
+//            var intervals = SwapCycleStartsAt(defaultPath, cycleVertex);
+//            if (intervals == null)
+//                return null;
+//
+//            return GetStrFromList(intervals);
+//        }
 
         private readonly Dictionary<string, List<string>> edges;
         private readonly List<string> defaultPath;

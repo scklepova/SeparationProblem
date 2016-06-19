@@ -1,13 +1,14 @@
-Hardly: 21;  Equalities: 0
-Hardly: 17;  Equalities: 0
-Hardly: 21;  Equalities: 0
-Hardly: 41;  Equalities: 0
-Hardly: 14;  Equalities: 0
-Hardly: 12;  Equalities: 0
-Hardly: 17;  Equalities: 0
-Hardly: 26;  Equalities: 0
-Hardly: 24;  Equalities: 0
-Hardly: 20;  Equalities: 0
+Hardly: 672;  Equalities: 0
+Hardly: 652;  Equalities: 0
+Hardly: 635;  Equalities: 0
+Hardly: 638;  Equalities: 0
+Hardly: 722;  Equalities: 0
+Hardly: 658;  Equalities: 0
+Hardly: 627;  Equalities: 0
+es: 0
+ 769;  Equalities: 0
+Hardly: 721;  Equalities: 0
+0;  Equalities: 0
 Hardly: 21;  Equalities: 0
 Hardly: 12;  Equalities: 0
 Hardly: 35;  Equalities: 0
