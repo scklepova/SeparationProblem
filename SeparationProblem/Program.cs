@@ -17,7 +17,7 @@ namespace SeparationProblem
 //            ConvertStringsToNums();
 //            WordsWithoutThreeDigitsInARow2();
 //            JoinBackups();
-//            RandomPermutationAutomatas();
+//            RandomPermutationAutomatas_FiltrationExperiment();
             AllPermutationAutomatas();
 //            AllPathsOf();
 //            FilterHard();
@@ -37,9 +37,9 @@ namespace SeparationProblem
 //            WriteAutomata();
 
 //            PermutationAutomatasForSwappedCyclesStrings();
-//            AddPrefixAndSuffixForNotSeparating();
+//            AddPrefixAndSuffixForNotSeparating_infiniteCycle();
 //            AddPref4();
-//            FirstSeparatedAutomataNumberForAllEqualities4();
+//            FirstSeparatingAutomataNumberForAllEqualities4();
 
 //            AllAutomatasVsFilterByRandom();
 
@@ -140,16 +140,8 @@ namespace SeparationProblem
                     var pair = new Tuple<string, string>(line, line.GetReverse());
                     if (pair.Item1 == pair.Item2)
                         continue;
-                    var separated = false;
-                    foreach (var automata in automatas)
-                    {
-                        if (automata.Separates(pair))
-                        {
-                            separated = true;
-                            break;
-                        }
-                    }
-                    if (!separated)
+
+                    if (FirstSeparatingAutomataNumber(automatas, pair) == -1)
                     {
 //                        hardPairs.Add(pair);
                         Console.WriteLine("Success!!!");
@@ -204,7 +196,7 @@ namespace SeparationProblem
 //                {
 //                    streamReader.Close();
 //                    Console.WriteLine("Again");
-//                    RandomPermutationAutomatas();
+//                    RandomPermutationAutomatas_FiltrationExperiment();
 //                    continue;
 //                }
 //                break;
@@ -212,7 +204,7 @@ namespace SeparationProblem
             Console.ReadKey();
         }
 
-        public static void RandomPermutationAutomatas()
+        public static void RandomPermutationAutomatas_FiltrationExperiment()
         {
             var lines = File.ReadAllLines("EqualCountnoThreeInARow26.txt");
 
@@ -299,7 +291,7 @@ namespace SeparationProblem
             stopwatch.Start();
             foreach (var pair in pairs)
             {
-                FirstSeparatedAutomataNumber(automatas, pair);
+                FirstSeparatingAutomataNumber(automatas, pair);
             }
             stopwatch.Stop();
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
@@ -310,61 +302,13 @@ namespace SeparationProblem
             var filtered = FilterPairsByRandomAutomatas(pairs, x => AutomataFactory.GetRandomAutomata(n), n, 20);
             foreach (var pair in filtered)
             {
-                FirstSeparatedAutomataNumber(automatas, pair);
+                FirstSeparatingAutomataNumber(automatas, pair);
             }
             stopwatch.Stop();
             Console.WriteLine(filtered.Count);
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
             Console.WriteLine("End.");
             Console.ReadKey();
-        }
-
-        private static void AllPathsOf()
-        {
-            var len = 37;
-            var vertexes = new List<string> {"0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111"};
-
-            edges = vertexes.ToDictionary(vertex => vertex, vertex => new List<string>());
-
-            foreach(var u in vertexes)
-            {
-                foreach(var v in vertexes)
-                {
-                    if(u.Substring(1) == v.Substring(0, v.Length - 1))
-                        edges[u].Add(v);
-                }
-            }
-
-            pathStack = new Stack<string>();
-            
-            foreach(var vertex in vertexes)
-            {
-                used = new Dictionary<string, bool>();
-                foreach(var v in vertexes)
-                {
-                    used.Add(v, false);
-                }
-                Dfs(vertex, len);
-            }
-        }
-
-        private static void Dfs(string v, int len)
-        {
-            pathStack.Push(v);
-            if(len == 0)
-            {
-                File.AppendAllText("paths.txt", string.Format("{0}\r\n", pathStack.ToList().PathToStr()));
-                pathStack.Pop();
-                return;
-            }
-
-            foreach(var u in edges[v])
-            {
-                Dfs(u, len - 1);
-            }
-
-            pathStack.Pop();
-            return;
         }
 
         public static void WordsWithoutThreeDigitsInARow2()
@@ -475,14 +419,6 @@ namespace SeparationProblem
                         streamWriter.WriteLine(line);
                 }
             }
-        }
-
-        private static void OpenFile()
-        {
-            var filename = "EqualCountnoThreeInARow36.txt";
-            var lines = File.ReadAllLines(filename);
-
-            lines.Count();
         }
 
         private static void FilterHard()
@@ -691,7 +627,7 @@ namespace SeparationProblem
             Console.ReadKey();
         }
 
-        public static void AddPrefixAndSuffixForNotSeparating()
+        public static void AddPrefixAndSuffixForNotSeparating_infiniteCycle()
         {
             const string inputFilename = "eq4.txt";
             var pair = File.ReadAllLines(inputFilename)[0].GetPair();
@@ -699,12 +635,11 @@ namespace SeparationProblem
             var automatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(5, setsOfInt).ToList();
 //            Console.WriteLine(automatas.Count());
             var lastSeparatedAutomataNumber = -2;
-            var separatedAutomataNumber = -1;
 
             while (lastSeparatedAutomataNumber < automatas.Count - 1)
             {
-                separatedAutomataNumber = FirstSeparatedAutomataNumber(automatas, pair);
-                if (separatedAutomataNumber >= automatas.Count - 1)
+                var separatedAutomataNumber = FirstSeparatingAutomataNumber(automatas, pair);
+                if (separatedAutomataNumber == - 1)
                     break;
 
                 Console.WriteLine("Separated: " + separatedAutomataNumber);
@@ -754,15 +689,15 @@ namespace SeparationProblem
                     {
                         var goodPrefix = goodPrefixes[i];
                         var goodSuffix = goodSuffixes[i];
-                        var separated = FirstSeparatedAutomataNumber(automatas,
+                        var separated = FirstSeparatingAutomataNumber(automatas,
                             new Tuple<string, string>(goodPrefix + pair.Item1 + goodSuffix,
                                 goodPrefix + pair.Item2 + goodSuffix));
-                        if (separated > maxSeparated)
+                        if (separated > maxSeparated || separated == -1)
                         {
                             maxSeparated = separated;
                             maxprefix = goodPrefix;
                             maxSuffix = goodSuffix;
-                            if (maxSeparated == automatas.Count)
+                            if (maxSeparated == -1)
                                 break;
                         }
                     }
@@ -813,19 +748,9 @@ namespace SeparationProblem
                         suffix = suffix.BinaryPlusOne();
                         continue;
                     }
-                    var separated = false;
                     Console.WriteLine("{0} {1}", prefix, suffix);
-                    foreach (var automata in automatas)
-                    {
-                        if (automata.Separates(prefix + pair.Item1 + suffix,
-                            prefix + pair.Item2 + suffix))
-                        {
-                            separated = true;
-                            break;
-                        }
-                    }
 
-                    if (!separated)
+                    if (FirstSeparatingAutomataNumber(automatas, prefix + pair.Item1 + suffix, prefix + pair.Item2 + suffix) == -1)
                     {
                         eq = true;
                         Console.WriteLine("Success!!!");
@@ -856,26 +781,27 @@ namespace SeparationProblem
             Console.ReadKey();
         }
 
-        public static int FirstSeparatedAutomataNumber(IEnumerable<Automata> automatas, Tuple<string, string> pair )
+        public static int FirstSeparatingAutomataNumber(IEnumerable<Automata> automatas, Tuple<string, string> pair)
         {
-            var separated = false;
-            var automataCount = 0;
+            var automataNumber = 0;
             foreach (var automata in automatas)
             {
                 if (automata.Separates(pair))
                 {
-                    separated = true;
-                    break;
+                    return automataNumber;
                 }
-                automataCount++;
+                automataNumber++;
             }
 
-            if (!separated)
-            {
-                Console.WriteLine("Success!!");
-            }
+            
+            Console.WriteLine("Success!!");
+            return -1;
+        }
 
-            return automataCount;
+        public static int FirstSeparatingAutomataNumber(IEnumerable<Automata> automatas, string w1, string w2)
+        {
+            var pair = new Tuple<string, string>(w1, w2);
+            return FirstSeparatingAutomataNumber(automatas, pair);
         }
 
         public static void WriteAutomata(Automata a, Tuple<string, string> pair)
@@ -977,9 +903,9 @@ namespace SeparationProblem
             Console.ReadKey();
         }
 
-        public static void FirstSeparatedAutomataNumberForAllEqualities4()
+        public static void FirstSeparatingAutomataNumberForAllEqualities4()
         {
-            var filename = "totalEqualities4_4.txt";
+            const string filename = "totalEqualities4_4.txt";
             var lines = File.ReadAllLines(filename);
             var sets = AutomataFactory.GetAllSetsOfInt(5);
             var automatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(5, sets);
@@ -989,10 +915,10 @@ namespace SeparationProblem
             for (var i = 2; i < lines.Count(); i += 3)
             {
                 var line = lines[i];
-                var firstSeparated = FirstSeparatedAutomataNumber(automatas, line.GetPair());
+                var firstSeparated = FirstSeparatingAutomataNumber(automatas, line.GetPair());
                 streamWriter.WriteLine("{1} separated {0}", line, firstSeparated);
                 Console.WriteLine("{1} separated {0}", line, firstSeparated);
-                if (firstSeparated > maxSep)
+                if (firstSeparated > maxSep || firstSeparated == -1)
                 {
                     maxSep = firstSeparated;
                     maxSeparatedPair = line;
@@ -1003,13 +929,6 @@ namespace SeparationProblem
             Console.WriteLine("The end");
             streamWriter.Close();
             Console.ReadKey();
-        }
-
-        public void EqualitiesForPermutationAutomatas()
-        {
-            var statesCount = 4;
-            var automatas = AutomataFactory.GetAllPermutationAutomata(4);
-            var str = "0";
         }
 
         public static void SwapCycles_OldVersion()
@@ -1070,10 +989,9 @@ namespace SeparationProblem
 
             while (!eq)
             {
-                var words = GetAllWordsOfLength(len);
-                for (var i =  0; i < words.Count; i++)
+                var words = WordsFactory.GetAllWordsOfLength(len);
+                foreach (var w1 in words)
                 {
-                    var w1 = words[i];
                     if (w1[0] == '1')
                         break;
                     for(var j = words.FindIndex(x => x == w1); j < words.Count; j++)
@@ -1082,34 +1000,15 @@ namespace SeparationProblem
                         if (w1 != w2 && w1.Substring(0, 3) == w2.Substring(0, 3) && w1.Substring(len - 4) == w2.Substring(len - 4) && w1.Count1() == w2.Count1())
                         {
                             Console.WriteLine("{0} {1}", w1, w2);
-                            var separated = false;
-                            foreach (var automata in automatas)
+
+                            if (FirstSeparatingAutomataNumber(automatas, w1, w2) == -1 &&
+                                FirstSeparatingAutomataNumber(allAutomatas, w1, w2) == -1)
                             {
-                                if (automata.Separates(w1, w2))
-                                {
-                                    separated = true;
-                                    break;
-                                }
-                            }
-                            if (!separated)
-                            {
-                                var trSep = false;
-                                foreach (var automata in allAutomatas)
-                                {
-                                    if (automata.Separates(w1, w2))
-                                    {
-                                        trSep = true;
-                                        break;
-                                    }
-                                }
-                                if (!trSep)
-                                {
-                                    eq = true;
-                                    Console.WriteLine("Success!!");
-                                    Console.WriteLine("{0} {1}", w1, w2);
-                                    equality = new Tuple<string, string>(w1, w2);
-                                    break;
-                                }
+                                eq = true;
+                                Console.WriteLine("Success!!");
+                                Console.WriteLine("{0} {1}", w1, w2);
+                                equality = new Tuple<string, string>(w1, w2);
+                                break;
                             }
                         }
                     }
@@ -1122,24 +1021,5 @@ namespace SeparationProblem
             File.WriteAllText("shortestEquality4.txt", equality.ToStr());
             Console.ReadKey();
         }
-
-        public static List<string> GetAllWordsOfLength(int n)
-        {
-            var arr = new int[n];
-            for (var i = 0; i < n; i++)
-                arr[i] = 0;
-            var ans = new List<int[]>();
-            while (arr.Length == n)
-            {
-                ans.Add(arr);
-                arr = arr.PlusOneIn2ss(n-1);
-            }
-
-            return ans.Select(x => x.GetString()).ToList();
-        } 
-
-        private static Stack<string> pathStack;
-        private static Dictionary<string, List<string>> edges;
-        private static Dictionary<string, bool> used;
     }
 }
