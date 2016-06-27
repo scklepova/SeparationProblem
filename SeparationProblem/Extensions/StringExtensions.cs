@@ -68,5 +68,36 @@ namespace SeparationProblem.Extensions
             }
             return c;
         }
+
+        public static string DraftToString(this string draft)
+        {
+            var w = "";
+            foreach (var c in draft)
+                if (c == '0')
+                    w += "01";
+                else w += "10";
+            return w;
+        }
+
+        public static string GetInverse(this string word)
+        {
+            var s = "";
+            foreach (var c in word)
+            {
+                if (c == '0')
+                    s += '1';
+                else s += '0';
+            }
+            return s;
+        }
+
+        public static int FactorCount(this string word, string factor)
+        {
+            var counter = 0;
+            for(var i = 0; i < word.Length - factor.Length + 1; i++)
+                if (word.Substring(i, factor.Length) == factor)
+                    counter++;
+            return counter;
+        }
     }
 }

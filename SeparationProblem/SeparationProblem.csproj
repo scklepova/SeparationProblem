@@ -58,6 +58,7 @@
     <Compile Include="Tests\AutomataTest.cs" />
     <Compile Include="Tests\CyclesTest.cs" />
     <Compile Include="Tests\RandomsTest.cs" />
+    <Compile Include="WordsFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

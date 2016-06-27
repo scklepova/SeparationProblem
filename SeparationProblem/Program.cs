@@ -18,7 +18,7 @@ namespace SeparationProblem
 //            WordsWithoutThreeDigitsInARow2();
 //            JoinBackups();
 //            RandomPermutationAutomatas_FiltrationExperiment();
-            AllPermutationAutomatas();
+//            AllPermutationAutomatas();
 //            AllPathsOf();
 //            FilterHard();
 
@@ -45,7 +45,10 @@ namespace SeparationProblem
 
 //            SwapCycles_OldVersion();
 //            ShortestEquality4();
+//            GetEqualitiesForPermutationAutomata();
+//            GetEqualitiesForAutomata();
 
+            PseudoPalindromes5Equalities();
         }
 
         public static void JoinBackups()
@@ -159,48 +162,38 @@ namespace SeparationProblem
 
         public static void AllPermutationAutomatas()
         {
-//            while (true)
-//            {
-//                var automatas = AutomataFactory.GetAllPermutationAutomata(6);
-            var sets = AutomataFactory.GetAllSetsOfInt(4);
-            var automatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(4, sets);
-                var streamReader = new StreamReader(File.OpenRead("separation.txt"));
+//            var automatas = AutomataFactory.GetAllPermutationAutomata(7);
+            var sets = AutomataFactory.GetAllSetsOfInt(5);
+            var automatas = AutomataFactory.GetAllAutomatas(5);
+            var streamReader = new StreamReader(File.OpenRead("separation.txt"));
 
 //            var hardlySeparatedPairs = File.ReadAllLines("separation.txt").Select(x => new Tuple<string, string>(x.Split(' ')[0], x.Split(' ')[1])).ToList();
-                var hardPairs = new List<Tuple<string, string>>();
+            var hardPairs = new List<Tuple<string, string>>();
 
-                while (!streamReader.EndOfStream)
+            while (!streamReader.EndOfStream)
+            {
+                var line = streamReader.ReadLine();
+                if (line != null)
                 {
-                    var line = streamReader.ReadLine();
-                    if (line != null)
+                    var words = line.Split(' ');
+                    var pair = new Tuple<string, string>(words[0], words[1]);
+                    var separated = false;
+                    foreach (var automata in automatas)
                     {
-                        var words = line.Split(' ');
-                        var pair = new Tuple<string, string>(words[0], words[1]);
-                        var separated = false;
-                        foreach (var automata in automatas)
+                        if (automata.Separates(pair))
                         {
-                            if (automata.Separates(pair))
-                            {
-                                separated = true;
-                                WriteAutomata(automata, pair);
-                                break;
-                            }
+                            separated = true;
+//                            WriteAutomata(automata, pair);
+                            break;
                         }
-                        if (!separated)
-                            hardPairs.Add(pair);
                     }
+                    if (!separated)
+                        hardPairs.Add(pair);
                 }
-//                if (hardPairs.Any())
-                    File.WriteAllLines("hard.txt", hardPairs.Select(pair => string.Format("{0} {1}", pair.Item1, pair.Item2)));
-//                else
-//                {
-//                    streamReader.Close();
-//                    Console.WriteLine("Again");
-//                    RandomPermutationAutomatas_FiltrationExperiment();
-//                    continue;
-//                }
-//                break;
-//            }
+            }
+
+            File.WriteAllLines("hard.txt", hardPairs.Select(pair => string.Format("{0} {1}", pair.Item1, pair.Item2)));
+            Console.WriteLine("The end");
             Console.ReadKey();
         }
 
@@ -984,20 +977,22 @@ namespace SeparationProblem
             var allAutomatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(4, sets).ToList();
             var automatas = AutomataFactory.GetAllPermutationAutomata(4).ToList();
             var eq = false;
-            var len = 19;
+            var len = 17;
             Tuple<string, string> equality = null;
 
             while (!eq)
             {
                 var words = WordsFactory.GetAllWordsOfLength(len);
-                foreach (var w1 in words)
+                for(var i = 0; i < words.Count; i++)
                 {
+                    var w1 = words[i];
                     if (w1[0] == '1')
                         break;
-                    for(var j = words.FindIndex(x => x == w1); j < words.Count; j++)
+                    for(var j = i + 1; j < words.Count; j++)
                     {
                         var w2 = words[j];
-                        if (w1 != w2 && w1.Substring(0, 3) == w2.Substring(0, 3) && w1.Substring(len - 4) == w2.Substring(len - 4) && w1.Count1() == w2.Count1())
+//                        if (w1 != w2 && w1.Substring(0, 3) == w2.Substring(0, 3) && w1.Substring(len - 4) == w2.Substring(len - 4) && w1.Count1() == w2.Count1())
+                        if(w1 != w2 && w1[0] == w2[0])
                         {
                             Console.WriteLine("{0} {1}", w1, w2);
 
@@ -1018,8 +1013,127 @@ namespace SeparationProblem
                 len++;
             }
 
-            File.WriteAllText("shortestEquality4.txt", equality.ToStr());
+            File.WriteAllText("shortestEquality4_1.txt", equality.ToStr());
             Console.ReadKey();
         }
-    }
+
+        public static void GetEqualitiesForPermutationAutomata()
+        {
+            var streamWriter = new StreamWriter(File.OpenWrite("permutationEqualities4.txt")) {AutoFlush = true};
+            var len = 14;
+            var automatas = AutomataFactory.GetAllPermutationAutomata(4).ToList();
+            var words = WordsFactory.GetAllWordsOfLength(len);
+            for (var i = 0; i < words.Count; i++)
+            {
+                var w1 = words[i];
+                if (w1[0] == 1)
+                    break;
+                for (var j = i + 1; j < words.Count; j++)
+                {
+                    var w2 = words[j];
+                    if (w1[0] != w2[0] && w1.Last() != w2.Last())
+                    {
+                        if(FirstSeparatingAutomataNumber(automatas, w1, w2) == -1)
+                            streamWriter.WriteLine("{0} {1}", w1, w2);
+                    }
+                }
+            }
+            streamWriter.Close();
+            Console.WriteLine("The end");
+            Console.ReadKey();
+        }
+
+        public static void GetEqualitiesForAutomata()
+        {
+//            1100101 0010011100
+            var permEqualities = File.ReadAllLines("permutationEqualities5.txt").Select(x => x.GetPair());
+            var len = 48;
+            var minLen = 46;
+            var affixes = WordsFactory.GetAllWordsOfLength(1);
+            for(var i = 2; i <= 16; i++)
+                affixes.AddRange(WordsFactory.GetAllWordsOfLength(i));
+            var automatas = AutomataFactory.GetAllConnectedAutomatasWithKnownSets(5, AutomataFactory.GetAllSetsOfInt(5)).ToList();
+            var writer = new StreamWriter(File.OpenWrite("shortestEqualities5_1.txt")) {AutoFlush = true};
+            var eq = false;
+
+            foreach (var permEquality in permEqualities)
+            {
+                Console.WriteLine(permEquality.ToStr());
+                if (eq)
+                    break;
+//                foreach (var prefix in affixes)
+                for(var i = affixes.FindIndex(x => x == "010101") + 1; i < affixes.Count; i++)
+                {
+                    var prefix = affixes[i];
+                    if (eq)
+                        break;
+                    if(prefix.Length < 3)
+                        continue;
+                    foreach (var suffix in affixes)
+                    {
+                        if(suffix == "01010101")
+                            continue;
+                        if (eq)
+                            break;
+                        if(suffix.Length < 4)
+                            continue;
+                        if (suffix.Length + permEquality.Item1.Length + prefix.Length <= minLen)
+                            continue;
+                        if (suffix.Length + permEquality.Item1.Length + prefix.Length > len)
+                            break;
+                        Console.WriteLine("{0} {1}", prefix, suffix);
+
+                        var pair = permEquality.AddPrefixAndSuffix(prefix, suffix);
+                        if (FirstSeparatingAutomataNumber(automatas, pair) == -1)
+                        {
+                            writer.WriteLine(pair.ToStr());
+                            eq = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            writer.Close();
+            Console.WriteLine("The end");
+            Console.ReadKey();
+        }
+
+        public static void PseudoPalindromes5Equalities()
+        {
+            var automatas = AutomataFactory.GetAllNonIsomorphicPermutationAutomatas5();
+            var len = 18;
+            var drafts = WordsFactory.GetAllWordsOfLength(len);
+            var used = drafts.ToDictionary(x => x.DraftToString(), x => false);
+            var writer = new StreamWriter(File.OpenWrite("evenEqualities36.txt")) {AutoFlush = true};
+            for(var i = 0; i < drafts.Count; i++)
+            {
+                if (drafts[i][0] == '1')
+                    break;
+                var w1 = drafts[i].DraftToString();
+                if(used[w1])
+                    continue;
+                for(var j = i + 1; j < drafts.Count; j++)
+                {
+                    if (drafts[i] == drafts[j] || drafts[i][0] == drafts[j][0] || drafts[i].Last() == drafts[j].Last() 
+                        || drafts[i].Count1() != drafts[j].Count1())
+                        continue;
+                    Console.WriteLine("{0} {1}", drafts[i], drafts[j]);
+                    var w2 = drafts[j].DraftToString();
+                    if (used[w2] || w1.FactorCount("00") % 2 != w2.FactorCount("00") % 2 || w1.FactorCount("11") % 2 != w2.FactorCount("11") % 2)
+                        continue;
+                    if (FirstSeparatingAutomataNumber(automatas, w1, w2) == -1)
+                        writer.WriteLine("{0} {1}", w1, w2);
+                }
+                used[w1] = true;
+                used[w1.GetReverse()] = true;
+                used[w1.GetInverse()] = true;
+                used[w1.GetReverse().GetInverse()] = true;
+            }
+
+            writer.Close();
+            Console.WriteLine("The end");
+            Console.ReadKey();
+        }
+    } 
 }

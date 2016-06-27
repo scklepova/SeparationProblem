@@ -14,7 +14,7 @@ namespace SeparationProblem.Tests
         [Test]
         public void TestAllWordsOfLen()
         {
-            var words = Program.GetAllWordsOfLength(3);
+            var words = WordsFactory.GetAllWordsOfLength(3);
             var expected = new List<string>() {"000", "001", "010", "011", "100", "101", "110", "111"};
             Assert.AreEqual(expected, words);
         }

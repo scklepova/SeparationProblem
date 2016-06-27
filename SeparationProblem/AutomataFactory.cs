@@ -134,16 +134,17 @@ namespace SeparationProblem
 
         public static IEnumerable<Automata> GetAllConnectedAutomatasWithKnownSets(int n, List<int[]> setsOfInt)
         {
+            var initState = 0;
             foreach (var set0 in setsOfInt)
             {
                 foreach (var set1 in setsOfInt)
                 {
-                    for (var initState = 0; initState < n; initState++)
-                    {
+//                    for (var initState = 0; initState < n; initState++)
+//                    {
                         var automata = new Automata(n, initState, new[] {set0, set1});
                         if (automata.IsConnected())
                             yield return automata;
-                    }
+//                    }
                 }
             }
         }
