@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SeparationProblem.Extensions
@@ -69,13 +70,13 @@ namespace SeparationProblem.Extensions
             return c;
         }
 
-        public static string DraftToString(this string draft)
+        public static string DraftToString(this string draft, string synonym0, string synonym1)
         {
             var w = "";
             foreach (var c in draft)
                 if (c == '0')
-                    w += "01";
-                else w += "10";
+                    w += synonym0;
+                else w += synonym1;
             return w;
         }
 
@@ -98,6 +99,14 @@ namespace SeparationProblem.Extensions
                 if (word.Substring(i, factor.Length) == factor)
                     counter++;
             return counter;
+        }
+
+        public static long Get5Hash(this string word, IEnumerable<Automata> automatas)
+        {
+            var hash = 0;
+            foreach (var automata in automatas)
+                hash = hash*5 + automata.LastState(word);
+            return hash;
         }
     }
 }

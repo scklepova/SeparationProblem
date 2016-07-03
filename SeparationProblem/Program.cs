@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using NUnit.Framework;
 using SeparationProblem.Extensions;
 
 namespace SeparationProblem
@@ -48,7 +50,10 @@ namespace SeparationProblem
 //            GetEqualitiesForPermutationAutomata();
 //            GetEqualitiesForAutomata();
 
-            PseudoPalindromes5Equalities();
+//            PseudoPalindromes5Equalities();
+
+            GetEqualitiesUsingHashtable();
+//            TrimCommonEndings();
         }
 
         public static void JoinBackups()
@@ -1102,26 +1107,27 @@ namespace SeparationProblem
         public static void PseudoPalindromes5Equalities()
         {
             var automatas = AutomataFactory.GetAllNonIsomorphicPermutationAutomatas5();
-            var len = 18;
+            var len = 19;
             var drafts = WordsFactory.GetAllWordsOfLength(len);
-            var used = drafts.ToDictionary(x => x.DraftToString(), x => false);
-            var writer = new StreamWriter(File.OpenWrite("evenEqualities36.txt")) {AutoFlush = true};
+            var used = drafts.ToDictionary(x => x.DraftToString("01", "10"), x => false);
+            var writer = new StreamWriter(File.OpenWrite("evenEqualities38_1.txt")) {AutoFlush = true};
             for(var i = 0; i < drafts.Count; i++)
             {
                 if (drafts[i][0] == '1')
                     break;
-                var w1 = drafts[i].DraftToString();
+                var w1 = drafts[i].DraftToString("01", "10");
                 if(used[w1])
                     continue;
                 for(var j = i + 1; j < drafts.Count; j++)
                 {
-                    if (drafts[i] == drafts[j] || drafts[i][0] == drafts[j][0] || drafts[i].Last() == drafts[j].Last() 
-                        || drafts[i].Count1() != drafts[j].Count1())
+                    if (drafts[i] == drafts[j] || drafts[i][0] == drafts[j][0] || drafts[i].Last() == drafts[j].Last() )
+//                        || drafts[i].Count1() != drafts[j].Count1())
                         continue;
-                    Console.WriteLine("{0} {1}", drafts[i], drafts[j]);
-                    var w2 = drafts[j].DraftToString();
-                    if (used[w2] || w1.FactorCount("00") % 2 != w2.FactorCount("00") % 2 || w1.FactorCount("11") % 2 != w2.FactorCount("11") % 2)
+                    
+                    var w2 = drafts[j].DraftToString("01", "10");
+                    if (used[w2] )//|| (w1.FactorCount("00") % 2 == w2.FactorCount("00") % 2) && (w1.FactorCount("11") % 2 == w2.FactorCount("11") % 2))
                         continue;
+//                    Console.WriteLine("{0} {1}", drafts[i], drafts[j]);
                     if (FirstSeparatingAutomataNumber(automatas, w1, w2) == -1)
                         writer.WriteLine("{0} {1}", w1, w2);
                 }
@@ -1134,6 +1140,63 @@ namespace SeparationProblem
             writer.Close();
             Console.WriteLine("The end");
             Console.ReadKey();
+        }
+
+        public static void GetEqualitiesUsingHashtable()
+        {
+            var automatas = AutomataFactory.GetAllNonIsomorphicPermutationAutomatas5();
+            var automataIndices = new int[] {0, 10, 30, 70, 100, 120, 240, 370, 460, 540};
+            var fixedAutomatas = automataIndices.Select(index => automatas[index]).ToList();
+            var len = 10;
+            var drafts = WordsFactory.GetAllWordsOfLength(len);
+            var words01 = drafts.Where(x => x[0] == '0').Select(x => x.DraftToString("0110", "1001"));
+            var words10 = drafts.Where(x => x[0] == '1').Select(x => x.DraftToString("0110", "1001"));
+            var hashtable = new Hashtable();
+
+            foreach (var word in words01)
+            {
+                var hash = word.Get5Hash(fixedAutomatas);
+                if(hashtable.ContainsKey(hash))
+                    ((List<string>)hashtable[hash]).Add(word);
+                else
+                    hashtable.Add(hash, new List<string> {word});
+            }
+
+            var writer = new StreamWriter(File.OpenWrite("evenEqualities_5hash_40_4.txt")) {AutoFlush = true};
+
+            foreach (var word in words10)
+            {
+                var hash = word.Get5Hash(fixedAutomatas);
+                if (hashtable.ContainsKey(hash))
+                {
+                    var candidates = (List<string>) hashtable[hash];
+                    foreach (var candidate in candidates)
+                    {
+                        if(FirstSeparatingAutomataNumber(automatas, word, candidate) == -1)
+                            writer.WriteLine("{0} {1}", word, candidate);
+                    }
+                }
+            }
+
+            writer.Close();
+            Console.WriteLine("The end");
+            Console.ReadKey();
+        }
+
+        public static void TrimCommonEndings()
+        {
+            var filename = "evenEqualities_5hash_40.txt";
+            var equalities = File.ReadAllLines(filename).Select(x => x.GetPair());
+            var trimmedEqualities = new List<Tuple<string, string>>();
+            foreach (var equality in equalities)
+            {
+                var i = equality.Item1.Length - 1;
+                while (i >= 0 && equality.Item1[i] == equality.Item2[i])
+                    i--;
+                trimmedEqualities.Add(new Tuple<string, string>(equality.Item1.Substring(0, i + 1), equality.Item2.Substring(0, i + 1)));
+            }
+
+            File.WriteAllLines("trimmed_" + filename, trimmedEqualities.Select(x => x.ToStr()));
         }
     } 
 }
