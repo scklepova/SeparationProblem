@@ -126,8 +126,8 @@ namespace SeparationProblem
             {
                 foreach (var set1 in setsOfInt)
                 {
-                    for (var initState = 0; initState < n; initState++)
-                        yield return new Automata(n, initState, new[] { set0, set1 });
+//                    for (var initState = 0; initState < n; initState++)
+                        yield return new Automata(n, 0, new[] { set0, set1 });
                 }
             }
         }

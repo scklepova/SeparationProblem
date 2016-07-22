@@ -20,7 +20,7 @@ namespace SeparationProblem
 //            WordsWithoutThreeDigitsInARow2();
 //            JoinBackups();
 //            RandomPermutationAutomatas_FiltrationExperiment();
-//            AllPermutationAutomatas();
+            AllPermutationAutomatas();
 //            AllPathsOf();
 //            FilterHard();
 
@@ -52,7 +52,7 @@ namespace SeparationProblem
 
 //            PseudoPalindromes5Equalities();
 
-            GetEqualitiesUsingHashtable();
+//            GetEqualitiesUsingHashtable();
 //            TrimCommonEndings();
         }
 
@@ -167,9 +167,9 @@ namespace SeparationProblem
 
         public static void AllPermutationAutomatas()
         {
-//            var automatas = AutomataFactory.GetAllPermutationAutomata(7);
-            var sets = AutomataFactory.GetAllSetsOfInt(5);
-            var automatas = AutomataFactory.GetAllAutomatas(5);
+            var automatas = AutomataFactory.GetAllPermutationAutomata(6);
+//            var sets = AutomataFactory.GetAllSetsOfInt(6);
+//            var automatas = AutomataFactory.GetAllAutomatas(6);
             var streamReader = new StreamReader(File.OpenRead("separation.txt"));
 
 //            var hardlySeparatedPairs = File.ReadAllLines("separation.txt").Select(x => new Tuple<string, string>(x.Split(' ')[0], x.Split(' ')[1])).ToList();
@@ -188,7 +188,7 @@ namespace SeparationProblem
                         if (automata.Separates(pair))
                         {
                             separated = true;
-//                            WriteAutomata(automata, pair);
+                            WriteAutomata(automata, pair);
                             break;
                         }
                     }
