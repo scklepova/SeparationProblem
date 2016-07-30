@@ -1,0 +1,6 @@
+C:\Users\Burning Soul\Documents\SeparationProblem\AnalyticEqualities\bin\Debug\AnalyticEqualities.exe.config
+C:\Users\Burning Soul\Documents\SeparationProblem\AnalyticEqualities\bin\Debug\AnalyticEqualities.exe
+C:\Users\Burning Soul\Documents\SeparationProblem\AnalyticEqualities\bin\Debug\AnalyticEqualities.pdb
+C:\Users\Burning Soul\Documents\SeparationProblem\AnalyticEqualities\obj\Debug\AnalyticEqualities.exe
+C:\Users\Burning Soul\Documents\SeparationProblem\AnalyticEqualities\obj\Debug\AnalyticEqualities.pdb
+C:\Users\Burning Soul\Documents\SeparationProblem\AnalyticEqualities\obj\Debug\AnalyticEqualities.csprojResolveAssemblyReference.cache

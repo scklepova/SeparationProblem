@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeparationProblem", "SeparationProblem\SeparationProblem.csproj", "{B8C31F82-BC5B-4C3D-A7C5-ACC5BF25299C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyticEqualities", "AnalyticEqualities\AnalyticEqualities.csproj", "{05AAFD36-CCC4-4EE0-9D6A-E0EBC4837EE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B8C31F82-BC5B-4C3D-A7C5-ACC5BF25299C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8C31F82-BC5B-4C3D-A7C5-ACC5BF25299C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8C31F82-BC5B-4C3D-A7C5-ACC5BF25299C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05AAFD36-CCC4-4EE0-9D6A-E0EBC4837EE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05AAFD36-CCC4-4EE0-9D6A-E0EBC4837EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05AAFD36-CCC4-4EE0-9D6A-E0EBC4837EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05AAFD36-CCC4-4EE0-9D6A-E0EBC4837EE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
