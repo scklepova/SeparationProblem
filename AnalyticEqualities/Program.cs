@@ -21,23 +21,29 @@ namespace AnalyticEqualities
          * Например, если перестановка над 7 элементами содержит 2 цикла длин 2 и 5, то порядок перестановки будет 10
          */
         {
-            var file = new StreamWriter(File.OpenWrite("minimumDegrees4.txt")) {AutoFlush = true};
+            var file = new StreamWriter(File.OpenWrite("minimumDegrees4_1.txt")) {AutoFlush = true};
             cyclesLengths[0] = new List<SortedSet<long>>();
             cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
-            for (var permutationLength = 2; permutationLength < 21; permutationLength++)
+            for (var permutationLength = 2; permutationLength < 8; permutationLength++)
             {
                 SetCyclesLengths(permutationLength);
                 var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
-                requiredDivisors = ReduceDivisors(requiredDivisors);
+                requiredDivisors = RemoveEqualDivisors(requiredDivisors);
+//                requiredDivisors = ReduceDivisors(requiredDivisors);
 //                file.WriteLine(string.Format("PermLength {0} : {1}", permutationLength, requiredDivisors.ToStr()));
                 file.WriteLine(permutationLength + " : " + SplitIntoFourGroups(requiredDivisors));
-                
+
 
             }
             file.Close();
             Console.WriteLine("End");
             Console.ReadKey();
         }
+
+        private static long[] RemoveEqualDivisors(long[] divisors)
+        {
+            return divisors.Distinct().ToArray();
+        } 
 
         private static long[] ReduceDivisors(long[] divisors)
         {
@@ -142,7 +148,7 @@ namespace AnalyticEqualities
         public static string SplitIntoFourGroups(long[] divisors)
         {
             long mask = 0;
-            var border = Math.Pow(4, divisors.Length - 1);
+            var border = Math.Pow(4, divisors.Length);
             long minmask = 0;
             var min = long.MaxValue;
             long mina = 0;
@@ -173,7 +179,12 @@ namespace AnalyticEqualities
                     temp = temp >> 2;
                 }
 
-                if (a + b + c + d < min)
+                if (a == 10 && b == 12 && c == 14 && d == 2)
+                {
+                    var t = 0;
+                }
+
+                if (a + b + c + d < min && IsEquality(a, b, c, d, divisors))
                 {
                     min = a + b + c + d;
                     minmask = mask;
@@ -189,6 +200,57 @@ namespace AnalyticEqualities
             return string.Format("a = {0}, b = {1}, c = {2}, d = {3}", mina, minb, minc, mind);
             //            Console.WriteLine();
             //            Console.ReadKey();
+        }
+
+        private static bool IsEquality(long a, long b, long c, long d, long[] divisors)
+        {
+            foreach (var divisor in divisors)
+            {
+                if (b % divisor == 0)
+                {
+                    if (!IsEquality(a + c, d, divisor)) return false;
+                }
+                else if (c % divisor == 0)
+                {
+                    if (!IsEquality(a, b + d, divisor)) return false;
+                }
+                else if (a % divisor == 0)
+                {
+                    if (!IsEquality(b, c, d, divisor)) return false;
+                }               
+                else if (d % divisor == 0)
+                {
+                    if (!IsEquality(a, b, c, divisor)) return false;
+                }
+                else return false;
+            }
+            return true;
+        }
+
+        private static bool IsEquality(long a, long b, long c, long divisor)
+        {            
+            if (a%divisor == 0)
+            {
+                if (!IsEquality(b, c, divisor)) return false;
+            }
+            else if (b%divisor == 0)
+            {
+//                if (!IsEquality(a, c, divisor)) return false;
+            }
+            else if (c%divisor == 0)
+            {
+                if (!IsEquality(a, b, divisor)) return false;
+            }
+            else
+            {
+                if (a%divisor != c%divisor) return false;
+            }           
+            return true;
+        }
+
+        private static bool IsEquality(long a, long b, long divisor)
+        {
+            return a%divisor == 0 || b%divisor == 0;
         }
 
         private static List<SortedSet<long>>[] cyclesLengths = new List<SortedSet<long>>[40];
