@@ -11,7 +11,8 @@ namespace AnalyticEqualities
     {
         static void Main(string[] args)
         {
-            FindPermutationEqualityDegees();          
+//            FindPermutationEqualityDegees(); 
+            BruteForceFor4();
         }
 
         public static void FindPermutationEqualityDegees()
@@ -28,7 +29,7 @@ namespace AnalyticEqualities
             {
                 SetCyclesLengths(permutationLength);
                 var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
-                requiredDivisors = RemoveEqualDivisors(requiredDivisors);
+//                requiredDivisors = RemoveEqualDivisors(requiredDivisors);
 //                requiredDivisors = ReduceDivisors(requiredDivisors);
 //                file.WriteLine(string.Format("PermLength {0} : {1}", permutationLength, requiredDivisors.ToStr()));
                 file.WriteLine(permutationLength + " : " + SplitIntoFourGroups(requiredDivisors));
@@ -42,7 +43,7 @@ namespace AnalyticEqualities
 
         private static long[] RemoveEqualDivisors(long[] divisors)
         {
-            return divisors.Distinct().ToArray();
+            return divisors.Distinct().Where(x => x != 1).OrderBy(x => x).ToArray();
         } 
 
         private static long[] ReduceDivisors(long[] divisors)
@@ -162,6 +163,11 @@ namespace AnalyticEqualities
                 long c = 1;
                 long d = 1;
 
+                if (mask == 18711)
+                {
+                    var t = 0;
+                }
+
                 var temp = mask;
                 var i = 0;
                 while (i < divisors.Length)
@@ -179,10 +185,7 @@ namespace AnalyticEqualities
                     temp = temp >> 2;
                 }
 
-                if (a == 10 && b == 12 && c == 14 && d == 2)
-                {
-                    var t = 0;
-                }
+                
 
                 if (a + b + c + d < min && IsEquality(a, b, c, d, divisors))
                 {
@@ -246,6 +249,49 @@ namespace AnalyticEqualities
                 if (a%divisor != c%divisor) return false;
             }           
             return true;
+        }
+
+        public static void BruteForceFor4()
+        {
+            var file = new StreamWriter(File.OpenWrite("minimumDegrees4_1.txt")) { AutoFlush = true };
+            cyclesLengths[0] = new List<SortedSet<long>>();
+            cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
+            var maxValue = 100;
+            var mina = 0;
+            var minb = 0;
+            var minc = 0;
+            var mind = 0;
+            for (var permutationLength = 2; permutationLength < 9; permutationLength++)
+            {
+                SetCyclesLengths(permutationLength);
+                var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+                requiredDivisors = ReduceDivisors(requiredDivisors);
+                var minSum = maxValue*4;
+                for(var a = 1; a < maxValue; a++)
+                    for(var b = 1; b < maxValue; b++)
+                        for(var c = 1; c < maxValue; c++)
+                            for (var d = 1; d < maxValue; d++)
+                            {
+                                if (a + b + c + d < minSum && IsEquality(a, b, c, d, requiredDivisors))
+                                {
+                                    minSum = a + b + c + d;
+                                    mina = a;
+                                    minb = b;
+                                    minc = c;
+                                    mind = d;
+                                }
+                            }
+
+                if (mina == 0)
+                    file.WriteLine("Fail");
+                else
+                    file.WriteLine(string.Format("k={4} : a={0}, b={1}, c={2}, d={3}", mina, minb, minc, mind, permutationLength));
+            }
+            
+
+            file.Close();
+            Console.WriteLine("End");
+            Console.ReadKey();
         }
 
         private static bool IsEquality(long a, long b, long divisor)
