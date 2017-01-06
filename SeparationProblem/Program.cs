@@ -20,7 +20,7 @@ namespace SeparationProblem
 //            WordsWithoutThreeDigitsInARow2();
 //            JoinBackups();
 //            RandomPermutationAutomatas_FiltrationExperiment();
-            AllPermutationAutomatas();
+//            AllPermutationAutomatas();
 //            AllPathsOf();
 //            FilterHard();
 
@@ -54,6 +54,8 @@ namespace SeparationProblem
 
 //            GetEqualitiesUsingHashtable();
 //            TrimCommonEndings();
+
+            GetEqualitiesOfConcreteLengthForAutomata();
         }
 
         public static void JoinBackups()
@@ -1039,6 +1041,32 @@ namespace SeparationProblem
                     if (w1[0] != w2[0] && w1.Last() != w2.Last())
                     {
                         if(FirstSeparatingAutomataNumber(automatas, w1, w2) == -1)
+                            streamWriter.WriteLine("{0} {1}", w1, w2);
+                    }
+                }
+            }
+            streamWriter.Close();
+            Console.WriteLine("The end");
+            Console.ReadKey();
+        }
+
+        public static void GetEqualitiesOfConcreteLengthForAutomata()
+        {
+            var streamWriter = new StreamWriter(File.OpenWrite("equalities3.txt")) { AutoFlush = true };
+            var len = 10;
+            var automatas = AutomataFactory.GetAllAutomatas(3).ToList();
+            var words = WordsFactory.GetAllWordsOfLength(len);
+            for (var i = 0; i < words.Count; i++)
+            {
+                var w1 = words[i];
+                if (w1[0] == 1)
+                    break;
+                for (var j = i + 1; j < words.Count; j++)
+                {
+                    var w2 = words[j];
+                    if (w1[0] == w2[0] && w1.Last() == w2.Last())
+                    {
+                        if (FirstSeparatingAutomataNumber(automatas, w1, w2) == -1)
                             streamWriter.WriteLine("{0} {1}", w1, w2);
                     }
                 }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AnalyticEqualities
 {
@@ -253,26 +251,29 @@ namespace AnalyticEqualities
 
         public static void BruteForceFor4()
         {
-            var file = new StreamWriter(File.OpenWrite("minimumDegrees4_1.txt")) { AutoFlush = true };
+            var file = new StreamWriter(File.OpenWrite("minimumDegrees4_2.txt")) { AutoFlush = true };
             cyclesLengths[0] = new List<SortedSet<long>>();
             cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
-            var maxValue = 100;
-            var mina = 0;
-            var minb = 0;
-            var minc = 0;
-            var mind = 0;
-            for (var permutationLength = 2; permutationLength < 9; permutationLength++)
+            const int maxValue = 1000;
+            const int maxPermutationLength = 16;
+            for (var permutationLength = 2; permutationLength < maxPermutationLength; permutationLength++)
             {
+                Console.WriteLine(permutationLength);
                 SetCyclesLengths(permutationLength);
                 var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
-                requiredDivisors = ReduceDivisors(requiredDivisors);
+                var reducedDivisors = ReduceDivisors(requiredDivisors);
                 var minSum = maxValue*4;
-                for(var a = 1; a < maxValue; a++)
-                    for(var b = 1; b < maxValue; b++)
-                        for(var c = 1; c < maxValue; c++)
-                            for (var d = 1; d < maxValue; d++)
+                var mina = 0;
+                var minb = 0;
+                var minc = 0;
+                var mind = 0;
+                //todo если организовать перебор по возрастанию суммарной длины, то для кадого следующего k можно будет начинать перебор с длины известной для k-1
+                for(var a = 1; a < maxValue && a < minSum; a++)
+                    for(var b = 1; b < maxValue && b < minSum; b++)
+                        for(var c = 1; c < maxValue && c < minSum; c++)
+                            for (var d = 1; d < maxValue && d < minSum; d++)
                             {
-                                if (a + b + c + d < minSum && IsEquality(a, b, c, d, requiredDivisors))
+                                if (a + b + c + d < minSum && IsEquality(a, b, c, d, reducedDivisors) && IsEquality(a, b, c, d, requiredDivisors))
                                 {
                                     minSum = a + b + c + d;
                                     mina = a;
@@ -285,9 +286,8 @@ namespace AnalyticEqualities
                 if (mina == 0)
                     file.WriteLine("Fail");
                 else
-                    file.WriteLine(string.Format("k={4} : a={0}, b={1}, c={2}, d={3}", mina, minb, minc, mind, permutationLength));
-            }
-            
+                    file.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}", mina, minb, minc, mind, permutationLength);
+            }            
 
             file.Close();
             Console.WriteLine("End");
