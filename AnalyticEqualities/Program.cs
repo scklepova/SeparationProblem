@@ -207,87 +207,73 @@ namespace AnalyticEqualities
         {
             foreach (var divisor in divisors)
             {
-                if (b % divisor == 0)
+                if (b % divisor == 0 && IsEquality(a + c, d, divisor) ||
+                    c % divisor == 0 && IsEquality(a, b + d, divisor) ||
+                    a % divisor == 0 && IsEquality(b, c, d, divisor) ||
+                    d % divisor == 0 && IsEquality(a, b, c, divisor))
                 {
-                    if (!IsEquality(a + c, d, divisor)) return false;
+                    continue;
                 }
-                else if (c % divisor == 0)
-                {
-                    if (!IsEquality(a, b + d, divisor)) return false;
-                }
-                else if (a % divisor == 0)
-                {
-                    if (!IsEquality(b, c, d, divisor)) return false;
-                }               
-                else if (d % divisor == 0)
-                {
-                    if (!IsEquality(a, b, c, divisor)) return false;
-                }
-                else return false;
+                return false;
             }
             return true;
         }
 
         private static bool IsEquality(long a, long b, long c, long divisor)
-        {            
-            if (a%divisor == 0)
-            {
-                if (!IsEquality(b, c, divisor)) return false;
-            }
-            else if (b%divisor == 0)
-            {
-//                if (!IsEquality(a, c, divisor)) return false;
-            }
-            else if (c%divisor == 0)
-            {
-                if (!IsEquality(a, b, divisor)) return false;
-            }
-            else
-            {
-                if (a%divisor != c%divisor) return false;
-            }           
-            return true;
+        {
+            if (a % divisor == 0 && IsEquality(b, c, divisor) ||
+                c % divisor == 0 && IsEquality(a, b, divisor) ||
+                a%divisor == c%divisor) 
+                return true;
+                       
+            return false;
         }
 
         public static void BruteForceFor4()
         {
-            var file = new StreamWriter(File.OpenWrite("minimumDegrees4_2.txt")) { AutoFlush = true };
+            var file = new StreamWriter(File.OpenWrite("minimumDegrees4_4.txt")) { AutoFlush = true };
             cyclesLengths[0] = new List<SortedSet<long>>();
             cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
-            const int maxValue = 1000;
-            const int maxPermutationLength = 16;
-            for (var permutationLength = 2; permutationLength < maxPermutationLength; permutationLength++)
+            var permutationLength = 2;
+            SetCyclesLengths(permutationLength);
+            var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+            var reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+            int d;
+            //todo если организовать перебор по возрастанию суммарной длины, то для кадого следующего k можно будет начинать перебор с длины известной для k-1
+            var length = 4;
+            while (true)
             {
-                Console.WriteLine(permutationLength);
-                SetCyclesLengths(permutationLength);
-                var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
-                var reducedDivisors = ReduceDivisors(requiredDivisors);
-                var minSum = maxValue*4;
-                var mina = 0;
-                var minb = 0;
-                var minc = 0;
-                var mind = 0;
-                //todo если организовать перебор по возрастанию суммарной длины, то для кадого следующего k можно будет начинать перебор с длины известной для k-1
-                for(var a = 1; a < maxValue && a < minSum; a++)
-                    for(var b = 1; b < maxValue && b < minSum; b++)
-                        for(var c = 1; c < maxValue && c < minSum; c++)
-                            for (var d = 1; d < maxValue && d < minSum; d++)
+                var foundIdentityOfSuchLength = false;
+//                Console.WriteLine(length);
+                for (var a = 1; a < length - 3; a++)
+                {
+                    if (foundIdentityOfSuchLength)
+                        break;
+                    for (var b = 1; b < length - a - 2; b++)
+                    {
+                        if (foundIdentityOfSuchLength)
+                            break;
+                        for (var c = 1; c < length - a - b - 1; c++)
+                        {
+                            d = length - a - b - c;
+                            if (IsEquality(a, b, c, d, reducedDivisors))
                             {
-                                if (a + b + c + d < minSum && IsEquality(a, b, c, d, reducedDivisors) && IsEquality(a, b, c, d, requiredDivisors))
-                                {
-                                    minSum = a + b + c + d;
-                                    mina = a;
-                                    minb = b;
-                                    minc = c;
-                                    mind = d;
-                                }
+                                file.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}", a, b, c, d, permutationLength);
+                                Console.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}", a, b, c, d, permutationLength);
+                                permutationLength++;
+                                SetCyclesLengths(permutationLength);
+                                requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+                                reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+                                foundIdentityOfSuchLength = true;
+                                break;
                             }
-
-                if (mina == 0)
-                    file.WriteLine("Fail");
-                else
-                    file.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}", mina, minb, minc, mind, permutationLength);
-            }            
+                        }
+                    }
+                }
+                if(!foundIdentityOfSuchLength)
+                    length++;
+            }
+            
 
             file.Close();
             Console.WriteLine("End");
