@@ -1,0 +1,11 @@
+k=2 : a=1, b=1, c=1, d=2, length=10
+k=3 : a=1, b=1, c=3, d=2, length=14
+k=4 : a=1, b=1, c=4, d=3, length=18
+k=5 : a=1, b=6, c=5, d=4, length=32
+k=6 : a=1, b=6, c=5, d=4, length=32
+k=7 : a=2, b=14, c=12, d=10, length=76
+k=8 : a=23, b=60, c=7, d=24, length=228
+k=9 : a=18, b=60, c=42, d=24, length=288
+k=10 : a=18, b=60, c=42, d=24, length=288
+k=11 : a=48, b=180, c=132, d=84, length=888
+k=12 : a=24, b=222, c=420, d=198, length=1728

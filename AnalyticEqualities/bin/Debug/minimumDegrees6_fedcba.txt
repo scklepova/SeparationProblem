@@ -1,0 +1,9 @@
+k=2 : a=1, b=1, c=1, d=1, e=1, f=2 length=14
+k=3 : a=1, b=1, c=1, d=1, e=3, f=2 length=18
+k=4 : a=1, b=1, c=1, d=1, e=4, f=3 length=22
+k=5 : a=1, b=2, c=1, d=6, e=5, f=4 length=38
+k=6 : a=1, b=2, c=1, d=6, e=5, f=4 length=38
+k=7 : a=2, b=7, c=12, d=5, e=10, f=5 length=82
+k=8 : a=2, b=18, c=16, d=30, e=14, f=12 length=184
+k=9 : a=4, b=36, c=32, d=60, e=28, f=24 length=368
+k=10 : a=8, b=18, c=10, d=60, e=50, f=42 length=376

@@ -1,0 +1,169 @@
+\documentclass[utf8]{article}
+
+\newcommand{\divisibleby}{\mathop{\raisebox{-2pt}{\vdots}}}
+
+\begin{document}
+	\begin{itemize}		
+		\item[\textbf{dbca}] $(xy)^a(yx)^b(xy)^c(yx)^d = (yx)^d(yx)^b(xy)^c(xy)^a$
+		\begin{itemize}
+			\item $a \divisibleby z$ and ($c \divisibleby z$ or $d \divisibleby z$)
+			\item  $b \divisibleby z$ and ($(a+c) \divisibleby z$ or $d \divisibleby z$)
+			\item $c \divisibleby z$ and ($a \divisibleby z$ or $(b+d) \divisibleby z$)
+			\item $d \divisibleby z$ and ($a \divisibleby z$ or $b \divisibleby z$)
+		\end{itemize}
+		
+		\begin{table}[!htb]
+			\arraycolsep=2pt
+			$$
+			\begin{array}{|c||c|c|c|c|c||c|c|c|c|c|}
+			\hline
+			&\multicolumn{5}{|c||}{\text{dcba}}&\multicolumn{5}{|c|}{\text{dbca}}\\
+			\hline
+			k&a&b&c&d&\text{Len}&a&b&c&d&\text{Len}\\
+			\hline
+			5,6&1&6&5&4&32&1&12&5&8&52\\
+			7&2&14&12&10&76&14&12&10&28&128\\
+			8&23&60&7&24&228&16&60&14&24&228\\
+			9&18&60&42&24&288&42&36&120&84&564\\
+			10&18&60&42&24&288&42&36&120&84&564\\
+			11&48&180&132&84&888&66&180&168&660&2148\\
+			12&24&222&420&198&1728&420&108&264&420&2424\\
+			13&216&528&840&312&3792&&&&&\\
+			\hline
+			\end{array}
+			$$
+		\end{table}
+		
+		\item[\textbf{dabc}] $(xy)^a(yx)^b(xy)^c(yx)^d = (yx)^d(xy)^a(yx)^b(xy)^c$
+		\begin{itemize}
+			\item $a \divisibleby z$ and ($c \divisibleby z$ or $d \divisibleby z$)
+			\item  $b \divisibleby z$ and ($(a+c) \divisibleby z$ or $d \divisibleby z$)
+			\item $c \divisibleby z$ and ($a \divisibleby z$ or $d \divisibleby z$)
+			\item $d \divisibleby z$
+		\end{itemize}
+		
+		\begin{table}[!htb]
+			\arraycolsep=2pt
+			$$
+			\begin{array}{|c||c|c|c|c|c||c|c|c|c|c|}
+			\hline
+			&\multicolumn{5}{|c||}{\text{dcba}}&\multicolumn{5}{|c|}{\text{dabc}}\\
+			\hline
+			k&a&b&c&d&\text{Len}&a&b&c&d&\text{Len}\\
+			\hline
+			5,6&1&6&5&4&32&6&4&6&5&42\\
+			7&2&14&12&10&76&1&7&6&60&148\\
+			8&23&60&7&24&228&8&7&48&60&246\\
+			9&18&60&42&24&288&14&8&42&180&488\\
+			10&18&60&42&24&288&60&8&60&126&508\\
+			11&48&180&132&84&888&18&11&180&840&2098\\
+			12&24&222&420&198&1728&18&11&180&840&2098\\
+			13&216&528&840&312&3792&&&&&\\
+			\hline
+			\end{array}
+			$$
+		\end{table}
+		
+		~
+		
+		~
+		
+		\item[\textbf{dbac}] $(xy)^a(yx)^b(xy)^c(yx)^d = (yx)^d(yx)^b(xy)^a(xy)^c$  *same as dbca
+		\begin{itemize}
+			\item $a \divisibleby z$ and ($c \divisibleby z$ or $d \divisibleby z$)
+			\item  $b \divisibleby z$ and ($a+c \divisibleby z$ or $d \divisibleby z$)
+			\item $c \divisibleby z$ and ($a \divisibleby z$ or $(b+d) \divisibleby z$)
+			\item $d \divisibleby z$ and ($a \divisibleby z$ or $b \divisibleby z$)
+		\end{itemize}
+		
+		\item[\textbf{bcda}] $(xy)^a(yx)^b(xy)^c(yx)^d = (yx)^b(xy)^c(yx)^d(xy)^a$ 
+		\begin{itemize}
+			\item $a \divisibleby z$
+			\item  $b \divisibleby z$ and ($a \divisibleby z$ or $d \divisibleby z$)
+			\item $c \divisibleby z$ and ($a \divisibleby z$ or $(b+d) \divisibleby z$)
+			\item $d \divisibleby z$ and ($a \divisibleby z$ or $b \divisibleby z$)
+		\end{itemize}
+		
+		\begin{table}[!htb]
+			\arraycolsep=2pt
+			$$
+			\begin{array}{|c||c|c|c|c|c||c|c|c|c|c|}
+			\hline
+			&\multicolumn{5}{|c||}{\text{dcba}}&\multicolumn{5}{|c|}{\text{bcda}}\\
+			\hline
+			k&a&b&c&d&\text{Len}&a&b&c&d&\text{Len}\\
+			\hline
+			5,6&1&6&5&4&32&5&6&4&6&42\\
+			7&2&14&12&10&76&60&1&7&6&148\\
+			8&23&60&7&24&228&60&8&7&48&246\\
+			9&18&60&42&24&288&180&14&8&42&488\\
+			10&18&60&42&24&288&126&60&8&60&508\\
+			11&48&180&132&84&888&840&18&11&180&2098\\
+			12&24&222&420&198&1728&840&18&11&180&2098\\
+			13&216&528&840&312&3792&&&&&\\
+			\hline
+			\end{array}
+			$$
+		\end{table}
+		
+		~
+		
+		~
+		
+		
+		\item[\textbf{bdca}] $(xy)^a(yx)^b(xy)^c(yx)^d = (yx)^b(yx)^d(xy)^c(xy)^a$ *same as dbca
+		\begin{itemize}
+			\item $a \divisibleby z$ and ($c \divisibleby z$ or $d \divisibleby z$)
+			\item $b \divisibleby z$ and ($(a+c) \divisibleby z$ or $d \divisibleby z$)
+			\item $c \divisibleby z$ and ($a \divisibleby z$ or $(b+d) \divisibleby z$)
+			\item $d \divisibleby z$ and ($a \divisibleby z$ or $b \divisibleby z$)
+		\end{itemize}
+		
+				~
+				
+				~
+				
+				~
+		
+		\item[\textbf{badc}] $(xy)^a(yx)^b(xy)^c(yx)^d = (yx)^b(xy)^a(yx)^d(xy)^c$ 
+		\begin{itemize}
+			\item $a \divisibleby z$ and ($c \divisibleby z$ or $d \divisibleby z$)
+			\item $b \divisibleby z$ and ($c \divisibleby z$ or $d \divisibleby z$)
+			\item $c \divisibleby z$ and ($a \divisibleby z$ or $b \divisibleby z$)
+			\item $d \divisibleby z$ and ($a \divisibleby z$ or $b \divisibleby z$)
+		\end{itemize}
+		
+		~
+		\begin{table}[!htb]
+			\arraycolsep=2pt
+			$$
+			\begin{array}{|c||c|c|c|c|c||c|c|c|c|c|}
+			\hline
+			&\multicolumn{5}{|c||}{\text{dcba}}&\multicolumn{5}{|c|}{\text{badc}}\\
+			\hline
+			k&a&b&c&d&\text{Len}&a&b&c&d&\text{Len}\\
+			\hline
+			5,6&1&6&5&4&32&5&12&5&12&68\\
+			7&2&14&12&10&76&7&60&7&60&268\\
+			8&23&60&7&24&228&56&60&56&60&464\\
+			9&18&60&42&24&288&56&180&56&180&944\\
+			10&18&60&42&24&288&120&126&120&126&984\\
+			11&48&180&132&84&888&198&840&198&840&4152\\
+			12&24&222&420&198&1728&198&840&198&840&4152\\
+			13&216&528&840&312&3792&&&&&\\
+			\hline
+			\end{array}
+			$$
+		\end{table}
+		
+		\item[\textbf{bdac}] $(xy)^a(yx)^b(xy)^c(yx)^d = (yx)^b(yx)^d(xy)^a(xy)^c$  *same as dbca 
+		\begin{itemize}
+			\item $a \divisibleby z$ and ($c \divisibleby z$ or $d \divisibleby z$)
+			\item $b \divisibleby z$ and ($(a+c) \divisibleby z$ or $d \divisibleby z$)
+			\item $c \divisibleby z$ and ($a \divisibleby z$ or $(b+d) \divisibleby z$)
+			\item $d \divisibleby z$ and ($a \divisibleby z$ or $b \divisibleby z$)
+		\end{itemize}
+	\end{itemize}
+	
+	
+\end{document}

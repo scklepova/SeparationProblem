@@ -10,7 +10,8 @@ namespace AnalyticEqualities
         static void Main(string[] args)
         {
 //            FindPermutationEqualityDegees(); 
-            BruteForceFor4();
+//            BruteForceFor4();
+            BruteForceFor6();
         }
 
         public static void FindPermutationEqualityDegees()
@@ -185,7 +186,7 @@ namespace AnalyticEqualities
 
                 
 
-                if (a + b + c + d < min && IsEquality(a, b, c, d, divisors))
+                if (a + b + c + d < min && IsIdentity_dcba(a, b, c, d, divisors))
                 {
                     min = a + b + c + d;
                     minmask = mask;
@@ -203,17 +204,101 @@ namespace AnalyticEqualities
             //            Console.ReadKey();
         }
 
-        private static bool IsEquality(long a, long b, long c, long d, long[] divisors)
+        private static bool IsIdentity_dcba(long a, long b, long c, long d, long[] divisors)
+        {
+            return divisors.All(divisor => IsIdentity_dcba(a, b, c, d, divisor));
+        }
+
+        private static bool IsIdentity_dcba(long a, long b, long c, long d, long divisor)
+        {
+            if (b%divisor == 0 && IsEquality(a + c, d, divisor) ||
+                c%divisor == 0 && IsEquality(a, b + d, divisor) ||
+                a%divisor == 0 && IsEquality(b, c, d, divisor) ||
+                d%divisor == 0 && IsEquality(a, b, c, divisor))
+                return true;
+            return false;
+        }
+
+        private static bool IsIdentity_dbca(long a, long b, long c, long d, long[] divisors)
         {
             foreach (var divisor in divisors)
             {
-                if (b % divisor == 0 && IsEquality(a + c, d, divisor) ||
-                    c % divisor == 0 && IsEquality(a, b + d, divisor) ||
-                    a % divisor == 0 && IsEquality(b, c, d, divisor) ||
-                    d % divisor == 0 && IsEquality(a, b, c, divisor))
-                {
+                if(a % divisor == 0 && IsEquality(c, d, divisor)||
+                   b % divisor == 0 && IsEquality(a+c, d, divisor) ||
+                   c % divisor == 0 && IsEquality(a, b + d, divisor) ||
+                   d % divisor == 0 && IsEquality(a, b, divisor))
                     continue;
-                }
+
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsIdentity_dabc(long a, long b, long c, long d, long[] divisors)
+        {
+            foreach (var divisor in divisors)
+            {
+                if( a % divisor == 0 && IsEquality(c, d, divisor) ||
+                    b % divisor == 0 && IsEquality(a+c, d, divisor) ||
+                    c % divisor == 0 && IsEquality(a, d, divisor) ||
+                    d % divisor == 0)
+                    continue;
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsIdentity_dbac(long a, long b, long c, long d, long[] divisors)
+        {
+            foreach (var divisor in divisors)
+            {
+                if (a % divisor == 0 && IsEquality(c, d, divisor) ||
+                    b % divisor == 0 && IsEquality(a + c, d, divisor) ||
+                    c % divisor == 0 && IsEquality(a, b + d, divisor) ||
+                    d % divisor == 0 && IsEquality(a, b, divisor))
+                    continue;
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsIdentity_bcda(long a, long b, long c, long d, long[] divisors)
+        {
+            foreach (var divisor in divisors)
+            {
+                if (a % divisor == 0 ||
+                    b % divisor == 0 && IsEquality(a, d, divisor) ||
+                    c % divisor == 0 && IsEquality(a, b + d, divisor) ||
+                    d % divisor == 0 && IsEquality(a, b, divisor))
+                    continue;
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsIdentity_bdca(long a, long b, long c, long d, long[] divisors)
+        {
+            foreach (var divisor in divisors)
+            {
+                if (a % divisor == 0 && IsEquality(c, d, divisor) ||
+                    b % divisor == 0 && IsEquality(a+c, d, divisor) ||
+                    c % divisor == 0 && IsEquality(a, b + d, divisor) ||
+                    d % divisor == 0 && IsEquality(a, b, divisor))
+                    continue;
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsIdentity_badc(long a, long b, long c, long d, long[] divisors)
+        {
+            foreach (var divisor in divisors)
+            {
+                if (a % divisor == 0 && IsEquality(c, d, divisor) ||
+                    b % divisor == 0 && IsEquality(c, d, divisor) ||
+                    c % divisor == 0 && IsEquality(a, b, divisor) ||
+                    d % divisor == 0 && IsEquality(a, b, divisor))
+                    continue;
                 return false;
             }
             return true;
@@ -221,17 +306,31 @@ namespace AnalyticEqualities
 
         private static bool IsEquality(long a, long b, long c, long divisor)
         {
-            if (a % divisor == 0 && IsEquality(b, c, divisor) ||
-                c % divisor == 0 && IsEquality(a, b, divisor) ||
-                a%divisor == c%divisor) 
+            if (b % divisor == 0 || a%divisor == c%divisor) 
                 return true;
                        
             return false;
         }
 
+        public static bool IsIdentity_fedcba(long a, long b, long c, long d, long e, long f, long[] divisors)
+        {
+            foreach (var divisor in divisors)
+            {
+                if (a % divisor == 0 && (b > f && IsIdentity_dcba(b-f, c, d, e, divisor) || b == f && IsEquality(c, d, e, divisor) || b < f && IsIdentity_dcba(c, d, e, f - b, divisor)) ||
+                    b % divisor == 0 && IsIdentity_dcba(a+c, d, e, f, divisor) ||
+                    c % divisor == 0 && IsIdentity_dcba(a, b+d, e, f, divisor) ||
+                    d % divisor == 0 && IsIdentity_dcba(a, b, c+e, f, divisor) ||
+                    e % divisor == 0 && IsIdentity_dcba(a, b, c, d+f, divisor) ||
+                    f % divisor == 0 && (a > e && IsIdentity_dcba(a - e, b, c, d, divisor) || a == e && IsEquality(b, c, d, divisor) || a < e && IsIdentity_dcba(b, c, d, e-a, divisor)))
+                    continue;
+                return false;
+            }
+            return true;
+        }
+
         public static void BruteForceFor4()
         {
-            var file = new StreamWriter(File.OpenWrite("minimumDegrees4_4.txt")) { AutoFlush = true };
+            var file = new StreamWriter(File.OpenWrite("minimumDegrees4_dcba_1.txt")) { AutoFlush = true };
             cyclesLengths[0] = new List<SortedSet<long>>();
             cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
             var permutationLength = 2;
@@ -241,7 +340,7 @@ namespace AnalyticEqualities
             int d;
             //todo если организовать перебор по возрастанию суммарной длины, то для кадого следующего k можно будет начинать перебор с длины известной для k-1
             var length = 4;
-            while (true)
+            while (length < 3000)
             {
                 var foundIdentityOfSuchLength = false;
 //                Console.WriteLine(length);
@@ -256,10 +355,10 @@ namespace AnalyticEqualities
                         for (var c = 1; c < length - a - b - 1; c++)
                         {
                             d = length - a - b - c;
-                            if (IsEquality(a, b, c, d, reducedDivisors))
+                            if (IsIdentity_dcba(a, b, c, d, reducedDivisors))
                             {
-                                file.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}", a, b, c, d, permutationLength);
-                                Console.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}", a, b, c, d, permutationLength);
+                                file.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}, length={5}", a, b, c, d, permutationLength, length*2);
+                                Console.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}, length = {5}", a, b, c, d, permutationLength, length*2);
                                 permutationLength++;
                                 SetCyclesLengths(permutationLength);
                                 requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
@@ -274,6 +373,68 @@ namespace AnalyticEqualities
                     length++;
             }
             
+
+            file.Close();
+            Console.WriteLine("End");
+            Console.ReadKey();
+        }
+
+        public static void BruteForceFor6()
+        {
+            var file = new StreamWriter(File.OpenWrite("minimumDegrees6_fedcba.txt")) { AutoFlush = true };
+            cyclesLengths[0] = new List<SortedSet<long>>();
+            cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
+            var permutationLength = 2;
+            SetCyclesLengths(permutationLength);
+            var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+            var reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+            int f;
+            //todo если организовать перебор по возрастанию суммарной длины, то для кадого следующего k можно будет начинать перебор с длины известной для k-1
+            var length = 404;
+            while (length < 3000)
+            {
+                var foundIdentityOfSuchLength = false;
+                //                Console.WriteLine(length);
+                for (var a = 1; a < length - 5; a++)
+                {
+                    if (foundIdentityOfSuchLength)
+                        break;
+                    for (var b = 1; b < length - a - 4; b++)
+                    {
+                        if (foundIdentityOfSuchLength)
+                            break;
+                        for (var c = 1; c < length - a - b - 3; c++)
+                        {
+                            if (foundIdentityOfSuchLength)
+                                break;
+                            for (var d = 1; d < length - a - b - c - 2; d++)
+                            {
+                                if (foundIdentityOfSuchLength)
+                                    break;
+                                for (var e = 1; e < length - a - b - c - d - 1; e++)
+                                {
+                                    f = length - a - b - c - d - e;
+                                    if (IsIdentity_fedcba(a, b, c, d, e, f, reducedDivisors))
+                                    {
+                                        file.WriteLine("k={6} : a={0}, b={1}, c={2}, d={3}, e={4}, f={5} length={7}", a, b, c, d, e, f, permutationLength, length * 2);
+                                        Console.WriteLine("k={6} : a={0}, b={1}, c={2}, d={3}, e={4}, f={5} length={7}", a, b, c, d, e, f, permutationLength, length * 2);
+                                        permutationLength++;
+                                        SetCyclesLengths(permutationLength);
+                                        requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+                                        reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+                                        foundIdentityOfSuchLength = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+                if (!foundIdentityOfSuchLength)
+                    length++;
+            }
+
 
             file.Close();
             Console.WriteLine("End");

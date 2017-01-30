@@ -1,0 +1,18 @@
+\documentclass[utf8]{article}
+
+\newcommand{\divisibleby}{\mathop{\raisebox{-2pt}{\vdots}}}
+
+\begin{document}
+	\begin{itemize}		
+		\item $(xy)^a(yx)^b(xy)^c(yx)^d(xy)^e(yx)^f = (yx)^f(xy)^e(yx)^d(yx)^b(xy)^c(xy)^a$
+		\begin{itemize}
+			\item $a \divisibleby z$ and (($b > f$ and (b-f, c, d, e) - identity) or ($b < f$ and (c, d, e, f-b) - identity) ($b = f$ and (c, d, e) - identity) )
+			\item  $b \divisibleby z$ and (a+c, d, e, f) - identity
+			\item $c \divisibleby z$ and (a, b+d, e, f) - identity
+			\item $d \divisibleby z$ and (a, b, c+e, f) - identity
+			\item $e \divisibleby z$ and (a, b, c, d+f) - identity
+			\item $f \divisibleby z$ and (($a > e$ and (a-e, b, c, d) - identity) or ($a < e$ and (b, c, d, e-a) - identity) ($a = e$ and (b, c, d) - identity) )
+		\end{itemize}
+		\item[*] (a, b, c, d) - identity means $(xy)^a(yx)^b(xy)^c(yx)^d =_z (yx)^d(yx)^b(xy)^c(xy)^a$
+	\end{itemize}
+\end{document}
