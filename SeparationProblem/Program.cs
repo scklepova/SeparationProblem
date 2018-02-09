@@ -20,7 +20,7 @@ namespace SeparationProblem
 //            WordsWithoutThreeDigitsInARow2();
 //            JoinBackups();
 //            RandomPermutationAutomatas_FiltrationExperiment();
-//            AllPermutationAutomatas();
+            AllPermutationAutomatas();
 //            AllPathsOf();
 //            FilterHard();
 
@@ -169,7 +169,7 @@ namespace SeparationProblem
 
         public static void AllPermutationAutomatas()
         {
-            var automatas = AutomataFactory.GetAllPermutationAutomata(6);
+            var automatas = AutomataFactory.GetAllPermutationAutomata(5);
 //            var sets = AutomataFactory.GetAllSetsOfInt(6);
 //            var automatas = AutomataFactory.GetAllAutomatas(6);
             var streamReader = new StreamReader(File.OpenRead("separation.txt"));

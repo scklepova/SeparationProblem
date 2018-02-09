@@ -1,0 +1,16 @@
+k=9 : a=18, b=60, c=42, d=24, length=288
+k=10 : a=18, b=60, c=42, d=24, length=288
+k=11 : a=48, b=180, c=132, d=84, length=888
+k=12 : a=198, b=420, c=222, d=24, length=1728
+k=13 : a=312, b=840, c=528, d=216, length=3792
+0, c=25, d=0, length=200
+k=15 : a=25, b=50, c=25, d=0, length=200
+k=16 : a=25, b=50, c=25, d=0, length=200
+k=17 : a=25, b=50, c=25, d=0, length=200
+k=18 : a=25, b=50, c=25, d=0, length=200
+k=19 : a=25, b=50, c=25, d=0, length=200
+k=20 : a=25, b=50, c=25, d=0, length=200
+k=21 : a=25, b=50, c=25, d=0, length=200
+k=22 : a=25, b=50, c=25, d=0, length=200
+k=23 : a=25, b=50, c=25, d=0, length=200
+k=24 : a=25, b=50, c=25, d=0, length=200

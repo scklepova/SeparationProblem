@@ -10,8 +10,9 @@ namespace AnalyticEqualities
         static void Main(string[] args)
         {
 //            FindPermutationEqualityDegees(); 
-//            BruteForceFor4();
-            BruteForceFor6();
+            BruteForceFor4();
+//            BruteForceFor6();
+//            AllCombinationsOfIdentites();
         }
 
         public static void FindPermutationEqualityDegees()
@@ -214,7 +215,8 @@ namespace AnalyticEqualities
             if (b%divisor == 0 && IsEquality(a + c, d, divisor) ||
                 c%divisor == 0 && IsEquality(a, b + d, divisor) ||
                 a%divisor == 0 && IsEquality(b, c, d, divisor) ||
-                d%divisor == 0 && IsEquality(a, b, c, divisor))
+                d%divisor == 0 && IsEquality(a, b, c, divisor)
+                )
                 return true;
             return false;
         }
@@ -328,22 +330,36 @@ namespace AnalyticEqualities
             return true;
         }
 
+        private static bool IsIdentity3(long[] divisors, long a, long b, long c)
+        {
+            foreach (var divisor in divisors)
+            {
+                if(a % divisor == 0 && b%divisor == c %divisor ||
+                    b%divisor == 0 && (a+c)%divisor == 0 ||
+                    c % divisor == 0 && a%divisor == b%divisor)
+                    continue;
+                return false;
+            }
+            return true;
+        }
+
+        //поиск тождеств вида (xy)^a(yx)^b(xy)^c(yx)^d = (yx)^d(xy)^c(yx)^b(xy)^a
         public static void BruteForceFor4()
         {
-            var file = new StreamWriter(File.OpenWrite("minimumDegrees4_dcba_1.txt")) { AutoFlush = true };
+            var file = new StreamWriter(File.OpenWrite("4_identies_experiment.txt")) { AutoFlush = true };
             cyclesLengths[0] = new List<SortedSet<long>>();
             cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
-            var permutationLength = 2;
-            SetCyclesLengths(permutationLength);
+            var permutationLength = 6;
+            for (var pm = 2; pm <= permutationLength; pm++)
+                SetCyclesLengths(pm);
             var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
             var reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
-            int d;
             //todo если организовать перебор по возрастанию суммарной длины, то для кадого следующего k можно будет начинать перебор с длины известной для k-1
-            var length = 4;
-            while (length < 3000)
+            var length = 10;
+            while (length < 200)
             {
                 var foundIdentityOfSuchLength = false;
-//                Console.WriteLine(length);
+                //                Console.WriteLine(length);
                 for (var a = 1; a < length - 3; a++)
                 {
                     if (foundIdentityOfSuchLength)
@@ -354,7 +370,66 @@ namespace AnalyticEqualities
                             break;
                         for (var c = 1; c < length - a - b - 1; c++)
                         {
-                            d = length - a - b - c;
+                            var d = length - a - b - c;
+                            if (IsIdentity_dcba(a, b, c, d, reducedDivisors))
+                            {
+                                file.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}, length={5}, a+c=b - {6}, a+d=c - {7}", 
+                                    a, b, c, d, permutationLength, length * 2, a + c == b, a + d == c);
+//                                Console.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}, length = {5}", a, b, c, d, permutationLength, length * 2);
+//                                permutationLength++;
+//                                SetCyclesLengths(permutationLength);
+//                                requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+//                                reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+//                                foundIdentityOfSuchLength = true;
+//                                break;
+                            }
+                        }
+                    }
+                }
+                if (!foundIdentityOfSuchLength)
+                    length++;
+            }
+
+
+            file.Close();
+            Console.WriteLine("End");
+            Console.ReadKey();
+        }
+
+        //поиск тождеств вида (xy)^a(yx)^b(xy)^c(yx)^d = (yx)^d(xy)^c(yx)^b(xy)^a
+        public static void BruteForceFor4_reduced()
+        {
+            var file = new StreamWriter(File.OpenWrite("dcba_a+c=b_a+d=c.txt")) { AutoFlush = true };
+            cyclesLengths[0] = new List<SortedSet<long>>();
+            cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
+            var permutationLength = 5;
+            for (var pm = 2; pm <= permutationLength; pm++)
+                SetCyclesLengths(pm);
+            var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+            var reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+            int d, c, b, a;
+            //todo если организовать перебор по возрастанию суммарной длины, то для кадого следующего k можно будет начинать перебор с длины известной для k-1
+            var length = 10;
+            while (length < 800000)
+            {
+                var foundIdentityOfSuchLength = false;
+//                Console.WriteLine(length);
+                //for (var a = 1; a < length - 3; a++)
+                for (c = (1 + length + 3)/4; c <= (length - 1)/3; c++)
+                {
+                    if (foundIdentityOfSuchLength)
+                        break;
+                    //for (var b = 1; b < length - a - 2; b++)
+                    //for (var b = a + 1; b <= (length - 1)/2; b++)
+                    //{
+                        if (foundIdentityOfSuchLength)
+                            break;
+                        //for (var c = 1; c < length - a - b - 1; c++)
+                        //{
+                    b = length - 2 * c;
+                    a = b - c;
+//                            d = length - a - b - c;
+                    d = c - a;
                             if (IsIdentity_dcba(a, b, c, d, reducedDivisors))
                             {
                                 file.WriteLine("k={4} : a={0}, b={1}, c={2}, d={3}, length={5}", a, b, c, d, permutationLength, length*2);
@@ -366,14 +441,106 @@ namespace AnalyticEqualities
                                 foundIdentityOfSuchLength = true;
                                 break;
                             }
-                        }
-                    }
+                        //}
+                    //}
                 }
                 if(!foundIdentityOfSuchLength)
                     length++;
             }
             
 
+            file.Close();
+            Console.WriteLine("End");
+            Console.ReadKey();
+        }
+
+        public static void BruteForceFor3_reduced()
+        {
+            cyclesLengths[0] = new List<SortedSet<long>>();
+            cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
+            var permutationLength = 4;
+            for (var pm = 2; pm <= permutationLength; pm++)
+                SetCyclesLengths(pm);
+            var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+            var reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+            int d;
+            var length = 4;
+            while (length <= 800000)
+            {
+                if(length % 10000 == 0)
+                    Console.WriteLine("Start length = {0}", length);
+                var foundIdentityOfSuchLength = false;
+                //                Console.WriteLine(length);
+                for (var a = 1; (length - 2 * a) / 2 > 0; a++)
+                {
+//                    if (foundIdentityOfSuchLength)
+//                        break;
+
+                    var c = (length - 2*a) / 2;
+                    var b = a + c;
+                    if (IsIdentity3(reducedDivisors, a, b, c))
+                    {
+                        Console.WriteLine("k={3} : a={0}, b={1}, c={2}, length = {4}", a, b, c, permutationLength, length * 2);
+                        permutationLength++;
+                        SetCyclesLengths(permutationLength);
+                        requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+                        reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+                        foundIdentityOfSuchLength = true;
+                        break;
+                    }                                            
+                }
+                if (!foundIdentityOfSuchLength)
+                    length += 1;
+            }
+
+            Console.WriteLine("End");
+            Console.ReadKey();
+        }
+
+        public static void BruteForceFor3()
+        {
+            var file = File.AppendText("3_identites_experiment.txt");
+            cyclesLengths[0] = new List<SortedSet<long>>();
+            cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
+            var permutationLength = 7;
+            for (var pm = 2; pm <= permutationLength; pm++)
+                SetCyclesLengths(pm);
+            var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+            var reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+            var length = 4;
+            var lcm = 420;
+            while (length <= 3 * lcm)
+            {
+                if (length % 10000 == 0)
+                    Console.WriteLine("Start length = {0}", length);
+                var foundIdentityOfSuchLength = false;
+                //                Console.WriteLine(length);
+                for (var a = 1; a < length - 2; a++)
+                {
+                    if (foundIdentityOfSuchLength)
+                        break;
+                    for (var b = 1; b < length - a - 1; b++)
+                    {
+                        var c = length - a - b;
+                        if (IsIdentity3(reducedDivisors, a, b, c))
+                        {
+                            file.WriteLine("k={3} : a={0}, b={1}, c={2}, length = {4}, b == a+c - {5}, <lcm - {6}", a, b, c, permutationLength,
+                                length * 2, b == a + c, a < lcm && b < lcm && c < lcm);
+                            permutationLength++;
+                            SetCyclesLengths(permutationLength);
+                            requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+                            reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+                            foundIdentityOfSuchLength = true;
+                            break;
+                        }
+                    }
+
+                }
+                if (!foundIdentityOfSuchLength)
+                    length += 2;
+            }
+
+            file.Flush();
             file.Close();
             Console.WriteLine("End");
             Console.ReadKey();
@@ -446,6 +613,49 @@ namespace AnalyticEqualities
             return a%divisor == 0 || b%divisor == 0;
         }
 
+        public static void AllCombinationsOfIdentites() //построим все возможные ком
+        {
+            var file = new StreamWriter(File.OpenWrite("allCombinations_6.txt")) { AutoFlush = true };
+            cyclesLengths[0] = new List<SortedSet<long>>();
+            cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
+            var permutationLength = 2;
+            SetCyclesLengths(permutationLength);
+            var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+            var reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+            while (permutationLength < 6)
+            {
+                permutationLength++;
+                SetCyclesLengths(permutationLength);
+                requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+                reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+            }
+
+            RulesDfs(reducedDivisors, 0);
+        }
+
+        private static void RulesDfs(long[] divisors, int index)
+        {
+            if(index == divisors.Length)
+            {
+                combinations.Add(appliedRules.ToList());
+                return;
+            }
+            for(var i = 0; i < 6; i++)
+            {
+                appliedRules.Push(new Tuple<int, long>(i, divisors[index]));
+                RulesDfs(divisors, index + 1);
+                appliedRules.Pop();
+            }
+        }
+
+        private static void ConvertToIdentity(List<Tuple<int, long>> rules)
+        {
+
+        }
+
         private static List<SortedSet<long>>[] cyclesLengths = new List<SortedSet<long>>[40];
+
+        private static Stack<Tuple<int, long>> appliedRules = new Stack<Tuple<int, long>>();
+        private static List<List<Tuple<int, long>>> combinations = new List<List<Tuple<int, long>>>();
     }
 }
