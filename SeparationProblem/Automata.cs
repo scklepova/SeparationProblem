@@ -24,6 +24,13 @@ namespace SeparationProblem
             };
         }
 
+        public Automata AutomataByPairs()
+        {
+            var trans01 = Enumerable.Range(0, n).Select(state => Transite(Transite(state, '0'), '1')).ToArray();
+            var trans10 = Enumerable.Range(0, n).Select(state => Transite(Transite(state, '1'), '0')).ToArray();
+            return new Automata(n, initState, new []{ trans01, trans10 });
+        }
+
         private int[] GetTransitionsFromCyclePermutation(string cyclePermutation, int n)
         {
             var trans = new int[n];

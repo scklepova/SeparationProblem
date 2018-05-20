@@ -20,7 +20,8 @@ namespace SeparationProblem
 //            WordsWithoutThreeDigitsInARow2();
 //            JoinBackups();
 //            RandomPermutationAutomatas_FiltrationExperiment();
-            AllPermutationAutomatas();
+            //AllPermutationAutomatas();
+            AllPermutationAutomatasForGeneratingPairs();
 //            AllPathsOf();
 //            FilterHard();
 
@@ -169,7 +170,8 @@ namespace SeparationProblem
 
         public static void AllPermutationAutomatas()
         {
-            var automatas = AutomataFactory.GetAllPermutationAutomata(5);
+            var automatas = AutomataFactory.GetAllPermutationAutomata(6);
+//            var automatas = AutomataFactory.GetAllNonIsomorphicPermutationAutomatas5();
 //            var sets = AutomataFactory.GetAllSetsOfInt(6);
 //            var automatas = AutomataFactory.GetAllAutomatas(6);
             var streamReader = new StreamReader(File.OpenRead("separation.txt"));
@@ -191,7 +193,7 @@ namespace SeparationProblem
                         {
                             separated = true;
                             WriteAutomata(automata, pair);
-                            break;
+                            //break;
                         }
                     }
                     if (!separated)
@@ -202,6 +204,62 @@ namespace SeparationProblem
             File.WriteAllLines("hard.txt", hardPairs.Select(pair => string.Format("{0} {1}", pair.Item1, pair.Item2)));
             Console.WriteLine("The end");
             Console.ReadKey();
+        }
+
+        public static void AllPermutationAutomatasForGeneratingPairs()
+        {
+            const int k = 6;
+            var automatas = AutomataFactory.GetAllPermutationAutomata(k).ToList();
+            var automatas5 = AutomataFactory.GetAllNonIsomorphicPermutationAutomatas5().ToList();
+            var hardPairs = new List<Tuple<int, int, int>>();
+
+            const int lcm = 60;
+            var triplets = new List<Tuple<int, int, int>>();
+            for(var a = 1; a < lcm; a++)
+                for(var b = 1; b < lcm; b++)
+                    for(var c = a; c < lcm; c++)
+                        triplets.Add(new Tuple<int, int, int>(a, b, c));
+
+            foreach (var triplet in triplets)
+            {
+                var pair = GetPair(triplet.Item1, triplet.Item2, triplet.Item3);
+                var separated = false;
+                var separatedBy5 = false;
+
+                foreach (var automata in automatas5)
+                {
+                    if (automata.Separates(pair))
+                    {
+                        separatedBy5 = true;
+                        break;
+                    }
+                }
+
+                if(separatedBy5) continue;
+
+                foreach (var automata in automatas)
+                {
+                    if (automata.Separates(pair))
+                    {
+                        separated = true;
+                        break;
+                    }
+                }
+                if (!separated)
+                    hardPairs.Add(triplet);
+            }
+
+            File.WriteAllLines("hard.txt", hardPairs.Select(t => string.Format("a={0} b={1} c={2} sum={3} a-b+c==0 - {4}", 
+                t.Item1, t.Item2, t.Item3, t.Item1 + t.Item2 + t.Item3, (t.Item1 - t.Item2 + t.Item3) % k == 0)));
+            Console.WriteLine("The end");
+            Console.ReadKey();
+        }
+
+        private static Tuple<string, string> GetPair(int a, int b, int c)
+        {
+            var word1 = string.Concat(Enumerable.Repeat("10", a)) + string.Concat(Enumerable.Repeat("01", b)) + string.Concat(Enumerable.Repeat("10", c));
+            var word2 = string.Concat(Enumerable.Repeat("01", c)) + string.Concat(Enumerable.Repeat("10", b)) + string.Concat(Enumerable.Repeat("01", a));
+            return new Tuple<string, string>(word1, word2);
         }
 
         public static void RandomPermutationAutomatas_FiltrationExperiment()
@@ -808,7 +866,8 @@ namespace SeparationProblem
         {
 //            var automatas = AutomataFactory.GetAllAutomatas(5);
 //            var a = automatas.ElementAt(1147295);
-            Console.WriteLine(a.ToString());
+            File.AppendAllLines("breaking_automata.txt", new [] {a.ToString(), a.AutomataByPairs().ToString(), Environment.NewLine});
+            //Console.WriteLine(a.ToString());
 //            Console.WriteLine();
 //
 //            var pair =
@@ -816,15 +875,15 @@ namespace SeparationProblem
 //                    "0011001110010101010101010101011010101010101010101001010101101010100111001100",
 //                    "0011001110010101011010101001010101010101010101101010101010101010100111001100");
 
-            Console.WriteLine(pair.Item1);
-            a.LastState(pair.Item1);
-            Console.WriteLine();
-            
-            a.LastState(pair.Item2);
-            Console.WriteLine();
-            Console.WriteLine(pair.Item2);
-
-            Console.ReadKey();
+//            Console.WriteLine(pair.Item1);
+//            a.LastState(pair.Item1);
+//            Console.WriteLine();
+//            
+//            a.LastState(pair.Item2);
+//            Console.WriteLine();
+//            Console.WriteLine(pair.Item2);
+//
+//            Console.ReadKey();
         }
 
         public static void PermutationAutomatasForSwappedCyclesStrings()

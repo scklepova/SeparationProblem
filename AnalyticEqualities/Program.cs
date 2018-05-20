@@ -10,7 +10,7 @@ namespace AnalyticEqualities
         static void Main(string[] args)
         {
 //            FindPermutationEqualityDegees(); 
-            BruteForceFor4();
+            BruteForceFor3();
 //            BruteForceFor6();
 //            AllCombinationsOfIdentites();
         }
@@ -502,14 +502,14 @@ namespace AnalyticEqualities
             var file = File.AppendText("3_identites_experiment.txt");
             cyclesLengths[0] = new List<SortedSet<long>>();
             cyclesLengths[1] = new List<SortedSet<long>> { new SortedSet<long> { 1 } };
-            var permutationLength = 7;
+            var permutationLength = 3;
             for (var pm = 2; pm <= permutationLength; pm++)
                 SetCyclesLengths(pm);
             var requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
             var reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
             var length = 4;
-            var lcm = 420;
-            while (length <= 3 * lcm)
+            var lcm = 60;
+            while (length <= 4 * lcm)
             {
                 if (length % 10000 == 0)
                     Console.WriteLine("Start length = {0}", length);
@@ -524,14 +524,14 @@ namespace AnalyticEqualities
                         var c = length - a - b;
                         if (IsIdentity3(reducedDivisors, a, b, c))
                         {
-                            file.WriteLine("k={3} : a={0}, b={1}, c={2}, length = {4}, b == a+c - {5}, <lcm - {6}", a, b, c, permutationLength,
-                                length * 2, b == a + c, a < lcm && b < lcm && c < lcm);
-                            permutationLength++;
-                            SetCyclesLengths(permutationLength);
-                            requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
-                            reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
-                            foundIdentityOfSuchLength = true;
-                            break;
+                            file.WriteLine("k={3} : a={0}, b={1}, c={2}, length = {4}, a - b + c == 0 -- {5}", a, b, c, permutationLength,
+                                length * 2, (a - b + c) % (permutationLength + 1) == 0);
+//                            permutationLength++;
+//                            SetCyclesLengths(permutationLength);
+//                            requiredDivisors = GetDivisors(cyclesLengths[permutationLength]);
+//                            reducedDivisors = ReduceDivisors(requiredDivisors).Reverse().ToArray();
+//                            foundIdentityOfSuchLength = true;
+//                            break;
                         }
                     }
 
