@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -9,11 +8,11 @@ namespace SeparationProblem
     {
         public static Automata GetRandomPermutationAutomata(int n)
         {
-            while(true)
+            while (true)
             {
                 var transitions = new[] {RandomFactory.GetRandomPermutation(n), RandomFactory.GetRandomPermutation(n)};
                 var automata = new Automata(n, RandomFactory.GetNext(n), transitions);
-                if(automata.IsConnected())
+                if (automata.IsConnected())
                     return automata;
             }
         }
@@ -22,7 +21,7 @@ namespace SeparationProblem
         {
             while (true)
             {
-                var transitions = new[] { RandomFactory.GetRandomArray(n, n), RandomFactory.GetRandomArray(n, n) };
+                var transitions = new[] {RandomFactory.GetRandomArray(n, n), RandomFactory.GetRandomArray(n, n)};
                 var automata = new Automata(n, RandomFactory.GetNext(n), transitions);
                 if (automata.IsConnected())
                     return automata;
@@ -32,29 +31,37 @@ namespace SeparationProblem
         public static IEnumerable<Automata> GetAllPermutationAutomata(int n)
         {
             var permutations = AllPermutations(n);
-            
+
             foreach (var permutation0 in permutations)
-            {
-                foreach (var permutation1 in permutations)
+            foreach (var permutation1 in permutations)
+                for (var initState = 0; initState < n; initState++)
                 {
-                    for (var initState = 0; initState < n; initState++)
-                    {
-                        var automata = new Automata(n, initState, new[] { permutation0, permutation1 });
-                        yield return automata;
-                    }
+                    var automata = new Automata(n, initState, new[] {permutation0, permutation1});
+                    yield return automata;
                 }
-            }           
+        }
+
+        public static IEnumerable<Automata> GetReducedPermutationAutomata(int n)
+        {
+            var permutations = AllPermutations(n);
+
+            foreach (var permutation0 in permutations)
+            foreach (var permutation1 in permutations)
+            {
+                var automata = new Automata(n, 0, new[] {permutation0, permutation1});
+                yield return automata;
+            }
         }
 
         public static List<Automata> GetAllNonIsomorphicPermutationAutomatas5()
         {
-            var filename = "permutationAutomata5.txt";
+            var filename = "C:\\SeparationProblem\\permutationAutomata5.txt";
             var lines = File.ReadAllLines(filename);
             var automatas = new List<Automata>();
             foreach (var line in lines)
             {
                 var perms = line.Split(' ');
-                for(int initState = 0; initState <= 4; initState++)
+                for (var initState = 0; initState <= 4; initState++)
                     automatas.Add(new Automata(5, initState, perms[0], perms[1]));
             }
             return automatas;
@@ -77,7 +84,7 @@ namespace SeparationProblem
         {
             var array = permutation.ToArray();
             // Find longest non-increasing suffix
-            int i = array.Length - 1;
+            var i = array.Length - 1;
             while (i > 0 && array[i - 1] >= array[i])
                 i--;
             // Now i is the head index of the suffix
@@ -88,14 +95,14 @@ namespace SeparationProblem
 
             // Let array[i - 1] be the pivot
             // Find rightmost element that exceeds the pivot
-            int j = array.Length - 1;
+            var j = array.Length - 1;
             while (array[j] <= array[i - 1])
                 j--;
             // Now the value array[j] will become the new pivot
             // Assertion: j >= i
 
             // Swap the pivot with j
-            int temp = array[i - 1];
+            var temp = array[i - 1];
             array[i - 1] = array[j];
             array[j] = temp;
 
@@ -123,29 +130,23 @@ namespace SeparationProblem
         public static IEnumerable<Automata> GetAllAutomatasWithKnownSets(int n, List<int[]> setsOfInt)
         {
             foreach (var set0 in setsOfInt)
-            {
-                foreach (var set1 in setsOfInt)
-                {
-//                    for (var initState = 0; initState < n; initState++)
-                        yield return new Automata(n, 0, new[] { set0, set1 });
-                }
-            }
+            foreach (var set1 in setsOfInt)
+                //                    for (var initState = 0; initState < n; initState++)
+                yield return new Automata(n, 0, new[] {set0, set1});
         }
 
         public static IEnumerable<Automata> GetAllConnectedAutomatasWithKnownSets(int n, List<int[]> setsOfInt)
         {
             var initState = 0;
             foreach (var set0 in setsOfInt)
+            foreach (var set1 in setsOfInt)
             {
-                foreach (var set1 in setsOfInt)
-                {
 //                    for (var initState = 0; initState < n; initState++)
 //                    {
-                        var automata = new Automata(n, initState, new[] {set0, set1});
-                        if (automata.IsConnected())
-                            yield return automata;
+                var automata = new Automata(n, initState, new[] {set0, set1});
+                if (automata.IsConnected())
+                    yield return automata;
 //                    }
-                }
             }
         }
 
@@ -155,18 +156,14 @@ namespace SeparationProblem
             var isPermutation = setsOfInt.ToDictionary(x => x, x => IsPermutation(x, n));
 //            var list = new List<Automata>();
             foreach (var set0 in setsOfInt)
-            {
-                foreach (var set1 in setsOfInt)
-                {
-                    if(!(isPermutation[set0] && isPermutation[set1]))
-                        for (var initState = 0; initState < n; initState++)
-                        {
-                            var automata = new Automata(n, initState, new[] {set0, set1});
-                            if (automata.IsConnected())
-                                yield return automata;
-                        }
-                }
-            }
+            foreach (var set1 in setsOfInt)
+                if (!(isPermutation[set0] && isPermutation[set1]))
+                    for (var initState = 0; initState < n; initState++)
+                    {
+                        var automata = new Automata(n, initState, new[] {set0, set1});
+                        if (automata.IsConnected())
+                            yield return automata;
+                    }
 //            return list;
         }
 
@@ -174,9 +171,7 @@ namespace SeparationProblem
         {
             var used = new bool[n];
             foreach (var i in set)
-            {
                 used[i] = true;
-            }
 
             return used.All(b => b);
         }
@@ -188,17 +183,17 @@ namespace SeparationProblem
                 array[i] = 0;
 
             var list = new List<int[]>();
-            while(array != null)
+            while (array != null)
             {
                 list.Add(array);
-                array = ArrayPlusOne(n, n - 1, array);         
+                array = ArrayPlusOne(n, n - 1, array);
             }
             return list;
         }
 
         private static int[] ArrayPlusOne(int n, int pos, int[] array)
         {
-            var newArray = (int[])array.Clone();
+            var newArray = (int[]) array.Clone();
             while (true)
             {
                 if (pos < 0)
@@ -214,5 +209,4 @@ namespace SeparationProblem
             }
         }
     }
-
 }
