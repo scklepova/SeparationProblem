@@ -1,0 +1,75 @@
+\documentclass[14pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{geometry}
+\usepackage{textcase}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{extsizes}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsthm}
+
+\usepackage{mathrsfs} %для витиеватых букв
+
+\title{Различение слов перестановочными автоматами}
+\date{14.06.2018}
+\author{Карпова Ольга}
+
+\geometry{a4paper,left=30mm,right=15mm,top=20mm,bottom=20mm}
+\renewcommand{\baselinestretch}{1.5}
+\setlength{\parindent}{1cm}
+\graphicspath{ {images/} }
+\setlength{\abovecaptionskip}{-25pt}
+
+\bibliographystyle{utf8gost705u}
+
+\newcommand{\image}[2]{
+	\begin{figure}[H]
+		\center{
+			\includegraphics[width=\textwidth]{#1}
+		}
+		\caption{#2}
+	\end{figure}
+}
+
+\newcommand{\sectionwithoutnumber}[1]{
+	\section*{#1}
+	\addcontentsline{toc}{section}{#1}
+}
+
+\newcommand{\subsectionwithoutnumber}[1]{
+	\subsection*{#1}
+	\addcontentsline{toc}{section}{#1}
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}{Лемма}[section]
+\newtheorem{proposition}{Предложение}[section]
+\newtheorem{corollary}{Следствие}[section]
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}[section]
+\newtheorem{example}{Пример}[section]
+\newtheorem*{note}{Замечание}
+
+%\algtext*{EndIf}% Remove "end if" text
+%\algtext*{EndWhile}% Remove "end while" text
+%\algtext*{EndFor}% Remove "end for" text
+
+\selectlanguage{russian}
+
+\makeatletter
+\begin{document}
+	\include{title}	
+	\tableofcontents
+	\include{content}			
+	\newpage
+	\bibliography{biblio}
+\end{document}
