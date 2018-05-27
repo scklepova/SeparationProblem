@@ -1,0 +1,170 @@
+\documentclass{article}
+\usepackage[russian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}{Следствие}
+
+\DeclareMathOperator{\lcm}{lcm}
+
+\begin{document}
+	\textbf{Наблюдение.} $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ является тождеством в $S_k$ тогда и только тогда, когда для каждого $z$ - порядка $k$-перестановки выполняется хотя бы одно из следующих правил:
+	\begin{equation}
+		z|a \hspace{10pt} \text{и} \hspace{10pt} z|(b-c)
+	\end{equation}
+	\begin{equation}
+		z|c \hspace{10pt} \text{и} \hspace{10pt} z|(b-a)
+	\end{equation}
+	\begin{equation}
+		z|b \hspace{10pt} \text{и} \hspace{10pt} z|(a+c)
+	\end{equation}
+
+	$\lcm(k)$ - наименьшее общее кратное всех чисел, меньших либо равных $k$.
+
+	\begin{theorem}
+		Пусть $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ - тождество в $S_k$ и $a + b + c \le \lcm(k)$. Тогда $b = a+c$.
+	\end{theorem}
+
+	\begin{proof}
+		Пусть $L_1$, $L_2$, $L_3$ - наименьшие общие кратные порядков, для которых выполняются правила (1), (2) и (3) из наблюдения соответственно.
+		Тогда, в соответствии с правилами из наблюдения
+		\begin{equation*}
+			\begin{gathered}
+				a = x_1 L_1\\
+				c = x_2 L_2\\	 
+				b = x_3 L_3
+			\end{gathered}
+		\end{equation*}
+		а также
+		\begin{equation} \label{eq1_1}
+			x_3 L_3 - x_2 L_2 = y_1 L_1
+		\end{equation}
+		\begin{equation} \label{eq1_2}
+			x_3 L_3 - x_1 L_1 = y_2 L_2
+		\end{equation}
+		\begin{equation} \label{eq1_3}
+			x_1 L_1 + x_2 L_2 = y_3 L_3			
+		\end{equation}
+		где  $\hspace{5pt}$ $x_1$, $x_2$, $x_3$, $y_2$  $\in \mathbb{N}$, $\hspace{5pt}$ $y_1$, $y_3 \in \mathbb{Z}$.
+		\\
+		\\
+		Выразим $x_3 L_3$ из \eqref{eq1_1} и \eqref{eq1_2}:
+		
+		$$
+		x_2 L_2 + y_1 L_1 = x_1 L_1 + y_2 L_2
+		$$
+		скомпонуем
+		\begin{equation}\label{main_eq}
+		(y_1 - x_1) L_1 = (y_2 - x_2) L_2
+		\end{equation}
+		
+		и рассмотрим решения получившегося уравнения \eqref{main_eq}.
+		
+		\begin{enumerate}
+		\item 
+			$y_1 = x_1$. Тогда 
+			$$
+			(y_1 - x_1) L_1 = (y_2 - x_2) L_2 = 0
+			$$
+			откуда $y_2 = x_2$.
+			Подставив получившееся в равенства \eqref{eq1_1} - \eqref{eq1_3} получим $y_3 = x_3$, откуда следует, что $b = a + c$.
+			
+		\item 
+			$y_1 > x_1$. Тогда из \eqref{main_eq} $y_2 > x_2$.
+			$$
+			x_3 L_3 = x_2 L_2 + y_1 L_1 > x_2 L_2 + x_1 L_1 = y_3 L_3
+			$$ т.е. $x_3 > y_3$.
+			Пусть 
+			\begin{equation*}
+				\begin{gathered}
+					y_1 = x_1 + t_1\\
+					y_2 = x_2 + t_2\\	 
+					x_3 = y_3 + t_3
+				\end{gathered}
+			\end{equation*}
+			где $\hspace{5pt} t_1, t_2, t_3 \in \mathbb{N}$.
+			Подставим в \eqref{eq1_1} - \eqref{eq1_3}:
+			
+			\begin{equation*}
+			\begin{gathered}
+			(y_3 + t_3) L_3 - x_2 L_2 = (x_1 + t_1) L_1\\
+			(y_3 + t_3) L_3 - x_1 L_1 = (x_2 + t_2) L_2\\
+			x_1 L_1 + x_2 L_2 = y_3 L_3
+			\end{gathered}
+			\end{equation*}
+			Сложив первое и третье равенства, получим 
+			$$
+			t_3 L_3 = t_1 L_1
+			$$
+			
+			Сложив второе и третье равенства, получим $$t_3 L_3 = t_2 L_2$$
+			Т.е. каждое из чисел $t_1 L_1, t_2 L_2, t_3 L_3$ должно делиться на $L_1, L_2, L_3$. 
+			Значит $$t_1 L_1 = t_2 L_2 = t_3 L_3 \ge \lcm(L_1, L_2, L_3) = \lcm(k)$$
+			Получается
+			$$
+			b = x_3 L_3 = (y_3 + t_3) L_3 = y_3 L_3 + t_3 L_3 \ge y_3 L_3 + \lcm(k) > \lcm(k)
+			$$
+			Но $a + b + c \le \lcm(k)$ по условию. Противоречие.
+			
+		\item 
+			$y_1 < x_1$ (все аналогично 2 пункту). Тогда из \eqref{main_eq} $y_2 < x_2$
+			$$
+			x_3 L_3 = x_2 L_2 + y_1 L_1 < x_2 L_2 + x_1 L_1 = y_3 L_3
+			$$ т.е. $x_3 < y_3$.
+			Пусть 
+			\begin{equation*}
+			\begin{gathered}
+			x_1 = y_1 + t_1\\
+			x_2 = y_2 + t_2\\	 
+			y_3 = x_3 + t_3
+			\end{gathered}
+			\end{equation*}
+			где $\hspace{5pt} t_1, t_2, t_3 \in \mathbb{N}$.
+			Подставим в \eqref{eq1_1} - \eqref{eq1_3}:
+			
+			\begin{equation*} 
+			\begin{gathered}
+			x_3 L_3 - (y_2 + t_2) L_2 = y_1 L_1\\
+			x_3 L_3 - (y_1 + t_1) L_1 = y_2 L_2\\
+			(y_1 + t_1) L_1 + (y_2 + t_2) L_2 = (x_3 + t_3) L_3
+			\end{gathered}
+			\end{equation*}
+			Сложив первое и третье равенства, получим 
+			$$
+			t_1 L_1 = t_3 L_3
+			$$
+			
+			Сложив второе и третье равенства, получим $$t_2 L_2 = t_3 L_3$$
+			Т.е. каждое из чисел $t_1 L_1, t_2 L_2, t_3 L_3$ должно делиться на $L_1, L_2, L_3$. 
+			Значит $$t_1 L_1 = t_2 L_2 = t_3 L_3 \ge \lcm(L_1, L_2, L_3) = \lcm(k)$$
+			Получается
+			$$
+			a = x_1 L_1 = (y_1 + t_1) L_1 = y_1 L_1 + t_1 L_1 \ge y_1 L_1 + \lcm(k) > \lcm(k)
+			$$
+			Но $a + b + c \le \lcm(k)$ по условию. Противоречие.
+		\end{enumerate}
+		
+	\end{proof}
+
+	\begin{corollary}
+		Для кратчайшего тождества вида $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ выполняется $b = a + c$.
+	\end{corollary}
+
+	\begin{proof}
+		Достаточно показать, что существуют тождества, для которых $a + b + c \le \lcm(k)$ (тогда кратчайшее тождество также удовлетворяет этому условию, а по теореме для всех тождеств с таким свойством выполняется $b = a + c$).
+		
+		Пусть $b := \frac{\lcm(k)}{2}$. Тогда из всех возможных порядков $b$ не делится на порядки, кратные $x = 2^m$, где $m = \max\{i \in \mathbb{N} \mid 2^i \le k\}$ и только на них.
+		
+		Если $x = k$, то $a = k \le \frac{\lcm(k)}{2}$.
+		
+		Пусть $x < k$ и $a := \lcm(x, \lcm(k - x))$. 
+		
+		$x > \frac{k}{2}$ (т.к. максимальная степень двойки, не превосходящая k), значит $k - x < \frac{k}{2}$. По теореме Чебышёва (постулат Бертрана) между $\frac{k}{2}$ и $k$ всегда найдется простое число. Обозначим его за $p$. Тогда $p$ не делит $a = \lcm(x, \lcm(k - x))$, но делит $\lcm(k)$. Значит $a \le \frac{\lcm(k)}{p} \le  \frac{\lcm(k)}{2}$.
+		
+		$c := b - a$. Искомое тождество построено.	
+	\end{proof}
+	
+\end{document}

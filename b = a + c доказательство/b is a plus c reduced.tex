@@ -1,0 +1,230 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{verbatim}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{geometry}
+%\usepackage{textcase}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{extsizes}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{float}
+%\usepackage{algorithmicx}
+\usepackage{algorithm}
+%\usepackage{algpseudocode}
+\usepackage{amsthm}
+
+\newtheorem{lemma}{Лемма}
+\newtheorem{definition}{Определение}
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}{Следствие}
+
+\DeclareMathOperator{\lcm}{lcm}
+\usepackage{extsizes}
+\graphicspath{ {images/} }
+
+
+\newcommand{\image}[2]{
+	\begin{figure}[H]
+		\center{
+			\includegraphics{#1}
+		}
+		\caption{#2}
+	\end{figure}
+}
+
+\newcommand{\scalingimage}[3]{
+	\begin{figure}[H]
+		\center{
+			\includegraphics[scale=#2]{#1}
+		}
+		\caption{#3}
+		\label{fig:#1}
+	\end{figure}
+}
+
+\begin{document}
+		$(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ является тождеством в $S_k$, если для каждого $z$ - порядка $k$-перестановки выполняется хотя бы одно из следующих правил:
+		\begin{equation} \label{3blocks 1st cond}
+		z|a \hspace{10pt} \text{и} \hspace{10pt} z|(b-c)
+		\end{equation}
+		\begin{equation}
+		z|c \hspace{10pt} \text{и} \hspace{10pt} z|(b-a)
+		\end{equation}
+		\begin{equation} \label{3blocks 3rd cond}
+		z|b \hspace{10pt} \text{и} \hspace{10pt} z|(a+c)
+		\end{equation}
+	
+	\begin{definition}
+		Циклической перестановкой из $k$ элементов с шагом $s$ будем называть такую циклическую перестановку, в которой элемент с номером $i$ переходит в элемент с номером $i+s \hspace{5pt} (\mod k)$. 
+	\end{definition}
+	
+	Далее будем считать, что элементы перестановки длины $k$ - это числа от $0$ до $k-1$.
+	
+	\begin{lemma} \label{existence_of_clockwise_and_vv}
+		Существуют такие перестановки $x$ и $y$ из $S_k$, что $xy$ - циклическая перестановка с шагом -1, а $yx$ - циклическая перестановка с шагом 1.
+	\end{lemma}
+	\begin{proof}
+		Рассмотрим перестановку $x$: $i \rightarrow -i (\mod k)$ и $y$: $i \rightarrow -i+1 (\mod k)$.
+		$$
+		x = 
+		\begin{pmatrix}
+		0&1&2&3&...&k-3&k-2&k-1\\
+		0&k-1&k-2&k-3&...&3&2&1
+		\end{pmatrix}
+		$$
+		
+		$$
+		y = 
+		\begin{pmatrix}
+		0&1&2&3&...&k-3&k-2&k-1\\
+		1&0&k-1&k-2&...&4&3&2
+		\end{pmatrix}
+		$$
+		
+		Тогда 
+		
+		$xy$: $i \xrightarrow y (-i+1) \xrightarrow x (-(-i+1)) == i-1$,
+		
+		$yx$: $i \xrightarrow x (-i) \xrightarrow y (-(-i)+1) == i+1$
+		
+	\end{proof}
+	
+	\begin{lemma} \label{a-b+c is 0 for odd}
+		Пусть $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ - тождество в $S_k$, где $k$ - нечетное. Тогда $a - b + c \equiv 0 \hspace{5pt} (\mod k)$.
+	\end{lemma}
+	\begin{proof}
+		Зафиксируем перестановки $xy$ и $yx$ из Леммы \ref{existence_of_clockwise_and_vv}.
+		Рассмотрим перестановочный автомат, в котором переход по символам осуществляется соответствующими перестановками $x$ и $y$. Тогда, чтобы $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ было тождеством для такого автомата, требуется, чтобы автомат закончил читать обе части равенства в одном состоянии, то есть	
+		\begin{equation}
+		(-a) + b + (-c) \equiv c + (-b) + a \hspace{5pt} (\mod k)
+		\end{equation}
+		что эквивалентно 
+		\begin{equation}
+		2(a - b + c) \equiv 0 \hspace{5pt} (\mod k)
+		\end{equation}
+		Из того, что $k$ нечетно, следует 
+		$$
+		(a - b + c) \equiv 0 \hspace{5pt} (\mod k)
+		$$.
+	\end{proof}
+
+	\begin{lemma} \label{a-b+c is 0 for even}
+		Пусть $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ - тождество в $S_k$, где $k$ - четное. Тогда $a - b + c \equiv 0 \hspace{5pt} (\mod \frac{k}{2})$.
+	\end{lemma}
+	\begin{proof}
+		Рассмотрим перестановочный автомат, как в доказательстве Леммы \ref{a-b+c is 0 for odd}. Аналогично, получим	
+		\begin{equation}
+		2(a - b + c) \equiv 0 \hspace{5pt} (\mod k)
+		\end{equation}
+		Из того, что $k$ четно, следует 
+		$$
+		(a - b + c) \equiv 0 \hspace{5pt} (\mod \frac{k}{2})
+		$$.
+	\end{proof}
+
+	\begin{corollary} \label{a-b+c is 0 mod lcm/2}
+		Пусть $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ - тождество в $S_k$. Тогда $a - b + c \equiv 0 \hspace{5pt} (\mod \frac{\lcm(k)}{2})$.
+	\end{corollary}
+	\begin{proof}
+		Из Леммы \ref{a-b+c is 0 for odd} $a - b + c \equiv 0$ по модулю наименьшего общего кратного всех нечетных чисел, меньших $k$.
+		По Лемме \ref{a-b+c is 0 for even} $a - b + c \equiv 0$ по модулю предмаксимальной степени числа 2, не превосходящей $k$.
+		Отсюда следует, что $a - b + c \equiv 0 \hspace{5pt} (\mod \frac{\lcm(k)}{2})$.
+	\end{proof}
+
+	\begin{theorem}
+		Пусть $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ - тождество в $S_k$ и $a + b + c \le \frac{\lcm(k)}{2}$. Тогда $b = a+c$.
+	\end{theorem}
+	\begin{proof}
+		Сразу заметим, что ни одно из чисел $a$, $b$, $c$ не равно 0, так как в противном случае мы будем рассматривать тождество другого типа.
+		
+		Из Следствия \ref{a-b+c is 0 mod lcm/2} вытекает, что \hspace{5pt} 
+		$$
+			b - a - c = \frac{\lcm(k)}{2}m,
+		$$ где $m \in \mathbb{Z}$. 
+		Откуда
+		$$
+			b = a + c + \frac{\lcm(k)}{2}m > 0.
+		$$
+		Получим цепочку неравенств 
+		$$
+			0 < a + c + \frac{\lcm(k)}{2}m < \frac{\lcm(k)}{2} + \frac{\lcm(k)}{2}m = \frac{\lcm(k)}{2}(m + 1),
+		$$то есть $m > -1$.
+		
+		С другой стороны, подставим $b$ в $a+b+c$, получим
+		$$
+			2(a + c) + \frac{\lcm(k)}{2}m \le \frac{\lcm(k)}{2}
+		$$ или 
+		$$
+			2(a + c) \le \frac{\lcm(k)}{2}(1-m)
+		$$
+		Поскольку сумма $a$ и $c$ должна быть положительным числом, требуется
+		$$
+			\frac{\lcm(k)}{2}(1-m) > 0,
+		$$ то есть $m < 1$.
+		
+		Значит, при заданных ограничениях $m = 0$, что влечет $b = a + c$.
+	\end{proof}
+
+	\begin{corollary}
+		Для кратчайшего тождества вида $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ выполняется $b = a + c$.
+	\end{corollary}
+	\begin{proof}
+		Достаточно показать, что существуют тождества, для которых $a + b + c \le \frac{\lcm(k)}{4}$ (тогда кратчайшее тождество также удовлетворяет этому условию, а по теореме для всех тождеств с таким свойством выполняется $b = a + c$).
+		
+		Пусть $m = 2k/3$, $a := lcm(m)$, $c := lcm(k - m) \cdot P(m)$, $b := a+c$, где $P(m)$ - произведение всех простых и степеней простых чисел из множества $\{m+1, ..., k\}$. $a$ и $c$ взяты из доказательства длины тождества из двух блоков. Оттуда же понятно, что любой порядок перестановки делит или $a$, или $c$, а, благодаря выбору $b$, делит и соответствующую разность. Длина такого тождества, конечно, в два раза больше длины тождества из двух блоков ($e^{\frac{2}{3}k + O(\frac{k}{\log k})}$), однако все равно асимптотически меньше, чем $\frac{\lcm(k)}{4}$ (который  равен $e^{k + O(\frac{k}{\log k})}$).
+	\end{proof}
+
+	Теперь, вооружившись утверждением о связи показателей степеней рассматриваемого тождества, можно доказать обратное утверждение, т.е. если $(xy)^a(yx)^b(xy)^c$ $\equiv_k$ $(yx)^c(xy)^b(yx)^a$, то выполняется хотя бы одно из условий \ref{3blocks 1st cond} - \ref{3blocks 3rd cond}. Для этого нам понадобится доказать еще несколько лемм.
+	Однако заметим сразу, что равенство $b = a + c$ делает истинной вторые части утверждений \ref{3blocks 1st cond} - \ref{3blocks 3rd cond}, если первые истинны.
+	
+	\begin{lemma}
+		 Если $(xy)^a(yx)^b(xy)^c$ $\equiv_k$ $(yx)^c(xy)^b(yx)^a$, тогда хотя бы одно из чисел $a$, $b$, $c$ делится на 2.
+	\end{lemma}
+	\begin{proof}
+		От противного. Пусть $a$, $b$, $c$ нечетны. Тогда $b \ne a+c$, поскольку их четность не совпадает. Противоречие.
+	\end{proof}
+
+	\begin{lemma}
+		Если $(xy)^a(yx)^b(xy)^c$ $\equiv_k$ $(yx)^c(xy)^b(yx)^a$ и $k \ge 4$, тогда хотя бы одно из чисел $a$, $b$, $c$ делится на 3.
+	\end{lemma}
+	\begin{proof}
+		От противного. Пусть ни одно из чисел $a$, $b$, $c$ не делится на 3. Тогда возможны лишь два варианта:
+		\begin{enumerate}
+			\item $a \equiv_3 c \equiv_3 1$ и $b \equiv_3 2$
+			\item $a \equiv_3 c \equiv_3 2$ и $b \equiv_3 1$
+		\end{enumerate}
+	
+		(В остальных случаях хотя бы одно из чисел оказывается кратным трем)
+		
+		Рассмотрим автомат относительно символов $xy$, $yx$ на рисунке \ref{fig:3division}. Такой автомат можно получить, взяв за перестановку по $x$ $(0)(1,2,3)$, по $y$ - $(1)(3, 2, 0)$. Начальное состояние 0.
+		
+		В первом случае автомат закончит читать левую часть тождества в состоянии 3 (после прочтения $(xy)^a$ окажется в состоянии 1, затем, прочитав $(yx)^b$ придет в состояние 3 в цикле), а правую - в состоянии 1 (после прочтения $(yx)^c$ окажется в состоянии 3 и в нем останется после $(xy)^b$).
+		
+		\scalingimage{3division}{0.5}{}
+		
+		Во втором случае автомат закончит читать левую часть тождества в состоянии 1 (после прочтения $(xy)^a$ окажется в состоянии 2, затем, прочитав $(yx)^b$ останется в состоянии 2), а правую - в состоянии 2 (после прочтения $(yx)^c$ окажется в состоянии 1 и перейдет в состояние 2 после $(xy)^b$).
+		
+		Получили противоречие с тем, что данная пара - тождество.
+	\end{proof}
+
+	\begin{lemma}
+		Если $(xy)^a(yx)^b(xy)^c$ $\equiv_k$ $(yx)^c(xy)^b(yx)^a$ и $k \ge 4$, тогда хотя бы одно из чисел $a$, $b$, $c$ делится на $k$.
+	\end{lemma}
+	\begin{proof}
+		От противного. Пусть ни одно из чисел $a$, $b$, $c$ не делится на $k$. Разберем несколько случаев.
+		\begin{enumerate}
+			\item $b+c \not \equiv_k 0$
+		\end{enumerate}
+	\end{proof}
+
+\end{document}
