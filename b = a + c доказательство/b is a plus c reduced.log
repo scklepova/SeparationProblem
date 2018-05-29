@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.9.28)  29 MAY 2018 19:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.9.28)  30 MAY 2018 02:28
 entering extended mode
 **"./b is a plus c reduced.tex"
 ("b is a plus c reduced.tex"
@@ -977,18 +977,10 @@ LaTeX Font Info:    Try loading font information for U+rsfs on input line 56.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\jknappen\ursfs.fd"
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-)
-Overfull \hbox (53.2136pt too wide) in paragraph at lines 106--108
-\T2A/cmr/m/n/12 ществ-л€-ет-с€ со-от-вет-ству-ю-щи-ми пе-ре-ста-нов-ка-ми $\OML
-/cmm/m/it/12 x$ \T2A/cmr/m/n/12 и $\OML/cmm/m/it/12 y$\T2A/cmr/m/n/12 . “о-гда,
- что-бы $\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 xy\OT1/cmr/m/n/12 )[](\OML/cmm/m/it/
-12 yx\OT1/cmr/m/n/12 )[](\OML/cmm/m/it/12 xy\OT1/cmr/m/n/12 )[]$
- []
-
-[1
+) [1
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
-Overfull \hbox (57.39896pt too wide) in paragraph at lines 179--180
+Overfull \hbox (57.39896pt too wide) in paragraph at lines 182--183
 \T2A/cmr/bx/n/12 —ледствие 2. \T2A/cmr/m/it/12 ƒл€ крат-чай-ше-го тож-де-ства в
 и-да $\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 xy\OT1/cmr/m/n/12 )[](\OML/cmm/m/it/12 
 yx\OT1/cmr/m/n/12 )[](\OML/cmm/m/it/12 xy\OT1/cmr/m/n/12 )[]$ \T2A/cmr/m/it/12 
@@ -996,99 +988,156 @@ yx\OT1/cmr/m/n/12 )[](\OML/cmm/m/it/12 xy\OT1/cmr/m/n/12 )[]$ \T2A/cmr/m/it/12
 OT1/cmr/m/n/12 )[](\OML/cmm/m/it/12 yx\OT1/cmr/m/n/12 )[]$
  []
 
-[3] <images/3division.png, id=21, 497.86pt x 362.35374pt>
+[3] <images/3division.png, id=22, 497.86pt x 362.35374pt>
 File: images/3division.png Graphic file (type png)
 
 <use images/3division.png>
-Package pdftex.def Info: images/3division.png used on input line 213.
+Package pdftex.def Info: images/3division.png used on input line 216.
 (pdftex.def)             Requested size: 248.92938pt x 181.17642pt.
- [4]
+ [4 <./images/3division.png>]
 <images/cycle_a_c.png, id=28, 603.25375pt x 442.65375pt>
 File: images/cycle_a_c.png Graphic file (type png)
 
 <use images/cycle_a_c.png>
-Package pdftex.def Info: images/cycle_a_c.png used on input line 227.
+Package pdftex.def Info: images/cycle_a_c.png used on input line 230.
 (pdftex.def)             Requested size: 301.62613pt x 221.32632pt.
 
 <images/process1_a_c.png, id=29, 669.50125pt x 229.85875pt>
 File: images/process1_a_c.png Graphic file (type png)
 
 <use images/process1_a_c.png>
-Package pdftex.def Info: images/process1_a_c.png used on input line 231.
+Package pdftex.def Info: images/process1_a_c.png used on input line 234.
 (pdftex.def)             Requested size: 334.7498pt x 114.92908pt.
 
 <images/process2_a_c.png, id=30, 650.43pt x 255.95625pt>
 File: images/process2_a_c.png Graphic file (type png)
 
 <use images/process2_a_c.png>
-Package pdftex.def Info: images/process2_a_c.png used on input line 232.
+Package pdftex.def Info: images/process2_a_c.png used on input line 235.
 (pdftex.def)             Requested size: 325.2142pt x 127.9778pt.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 239.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 242.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 239.
- [5 <./images/3division.png>] [6 <./images/cycle_a_c.png> <./images/process1_a_
-c.png>]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 242.
+ [5 <./images/cycle_a_c.png>] [6 <./images/process1_a_c.png> <./images/process2
+_a_c.png>]
 <images/cycle_a_2a.png, id=41, 603.25375pt x 442.65375pt>
 File: images/cycle_a_2a.png Graphic file (type png)
 
 <use images/cycle_a_2a.png>
-Package pdftex.def Info: images/cycle_a_2a.png used on input line 256.
+Package pdftex.def Info: images/cycle_a_2a.png used on input line 259.
 (pdftex.def)             Requested size: 301.62613pt x 221.32632pt.
 
 <images/process1_a_2a.png, id=42, 669.50125pt x 229.85875pt>
 File: images/process1_a_2a.png Graphic file (type png)
 
 <use images/process1_a_2a.png>
-Package pdftex.def Info: images/process1_a_2a.png used on input line 257.
+Package pdftex.def Info: images/process1_a_2a.png used on input line 260.
 (pdftex.def)             Requested size: 334.7498pt x 114.92908pt.
 
 <images/process2_a_2a.png, id=43, 650.43pt x 255.95625pt>
 File: images/process2_a_2a.png Graphic file (type png)
 
 <use images/process2_a_2a.png>
-Package pdftex.def Info: images/process2_a_2a.png used on input line 258.
+Package pdftex.def Info: images/process2_a_2a.png used on input line 261.
 (pdftex.def)             Requested size: 325.2142pt x 127.9778pt.
- [7 <./images/process2_a_c.png>] [8 <./images/cycle_a_2a.png> <./images/process
-1_a_2a.png>]
-<images/process2_a_2a_-c_is_2a.png, id=54, 650.43pt x 255.95625pt>
+
+<images/process2_a_2a_-c_is_2a.png, id=44, 650.43pt x 255.95625pt>
 File: images/process2_a_2a_-c_is_2a.png Graphic file (type png)
 
 <use images/process2_a_2a_-c_is_2a.png>
 Package pdftex.def Info: images/process2_a_2a_-c_is_2a.png used on input line 2
-77.
+80.
 (pdftex.def)             Requested size: 325.2142pt x 127.9778pt.
- [9 <./images/process2_a_2a.png> <./images/process2_a_2a_-c_is_2a.png>] [10] ("
-b is a plus c reduced.aux") ) 
+ [7] [8 <./images/cycle_a_2a.png> <./images/process1_a_2a.png>] [9 <./images/pr
+ocess2_a_2a.png> <./images/process2_a_2a_-c_is_2a.png>] <images/cycle_2m_z.png,
+ id=59, 583.17876pt x 442.65375pt>
+File: images/cycle_2m_z.png Graphic file (type png)
+
+<use images/cycle_2m_z.png>
+Package pdftex.def Info: images/cycle_2m_z.png used on input line 298.
+(pdftex.def)             Requested size: 291.58867pt x 221.32632pt.
+
+<images/process1_2m_z.png, id=60, 669.50125pt x 229.85875pt>
+File: images/process1_2m_z.png Graphic file (type png)
+
+<use images/process1_2m_z.png>
+Package pdftex.def Info: images/process1_2m_z.png used on input line 309.
+(pdftex.def)             Requested size: 334.7498pt x 114.92908pt.
+
+<images/process2_2m_z.png, id=61, 650.43pt x 255.95625pt>
+File: images/process2_2m_z.png Graphic file (type png)
+
+<use images/process2_2m_z.png>
+Package pdftex.def Info: images/process2_2m_z.png used on input line 310.
+(pdftex.def)             Requested size: 325.2142pt x 127.9778pt.
+ [10] [11 <./images/cycle_2m_z.png> <./images/process1_2m_z.png>]
+<images/process1_2m_z_init_0.png, id=70, 669.50125pt x 229.85875pt>
+File: images/process1_2m_z_init_0.png Graphic file (type png)
+
+<use images/process1_2m_z_init_0.png>
+Package pdftex.def Info: images/process1_2m_z_init_0.png used on input line 324
+.
+(pdftex.def)             Requested size: 334.7498pt x 114.92908pt.
+
+<images/process2_2m_z_init_0.png, id=71, 650.43pt x 255.95625pt>
+File: images/process2_2m_z_init_0.png Graphic file (type png)
+
+<use images/process2_2m_z_init_0.png>
+Package pdftex.def Info: images/process2_2m_z_init_0.png used on input line 325
+.
+(pdftex.def)             Requested size: 325.2142pt x 127.9778pt.
+ [12 <./images/process2_2m_z.png> <./images/process1_2m_z_init_0.png>]
+<images/2_cycles.png, id=77, 599.23875pt x 392.46625pt>
+File: images/2_cycles.png Graphic file (type png)
+
+<use images/2_cycles.png>
+Package pdftex.def Info: images/2_cycles.png used on input line 349.
+(pdftex.def)             Requested size: 299.61864pt x 196.23264pt.
+ [13 <./images/process2_2m_z_init_0.png>]
+Overfull \hbox (15.66356pt too wide) in paragraph at lines 365--366
+\OML/cmm/m/it/12 s:\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 xy\OT1/cmr/m/n/12 )[] = \O
+ML/cmm/m/it/12 s$ \T2A/cmr/m/n/12 по-сколь-ку $\OML/cmm/m/it/12 c[]\OMS/cmsy/m/
+n/12 j\OML/cmm/m/it/12 b$\T2A/cmr/m/n/12 ; ав-то-мат пе-ре-хо-дит к цик-лу $\OM
+L/cmm/m/it/12 c[]$\T2A/cmr/m/n/12 . $\OML/cmm/m/it/12 s:\OT1/cmr/m/n/12 (\OML/c
+mm/m/it/12 yx\OT1/cmr/m/n/12 )[] =
+ []
+
+
+LaTeX Warning: Command \cyrs invalid in math mode on input line 369.
+
+Missing character: There is no с in font cmr12!
+[14 <./images/2_cycles.png>] [15] [16] ("b is a plus c reduced.aux") ) 
 Here is how much of TeX's memory you used:
- 6402 strings out of 493334
- 89263 string characters out of 3136649
- 171075 words of memory out of 3000000
- 9781 multiletter control sequences out of 15000+200000
+ 6447 strings out of 493334
+ 90300 string characters out of 3136649
+ 171150 words of memory out of 3000000
+ 9820 multiletter control sequences out of 15000+200000
  12876 words of font info for 40 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,12n,32p,976b,400s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Burning Soul\AppData\Local\MiKTeX\2.9\f
-onts\pk\ljfour\lh\lh-t2a\dpi600\lati1200.pk> <C:\Users\Burning Soul\AppData\Loc
-al\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\labx1200.pk> <C:\Users\Burning S
-oul\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\larm1200.pk><C:/P
-rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Pro
-gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Progr
-am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files 
-(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86
-)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKT
-eX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files (x86)/M
-iKTeX 2.9/fonts/type1/public/rsfs/rsfs10.pfb>
-Output written on "b is a plus c reduced.pdf" (10 pages, 254606 bytes).
+ 40i,7n,32p,976b,470s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\User
+s\Burning Soul\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\lati12
+00.pk> <C:\Users\Burning Soul\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2
+a\dpi600\labx1200.pk> <C:\Users\Burning Soul\AppData\Local\MiKTeX\2.9\fonts\pk\
+ljfour\lh\lh-t2a\dpi600\larm1200.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmmi8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmr6.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/c
+m/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/symb
+ols/msbm10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/rsfs/rsfs1
+0.pfb>
+Output written on "b is a plus c reduced.pdf" (16 pages, 368364 bytes).
 PDF statistics:
- 235 PDF objects out of 1000 (max. 8388607)
+ 270 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 71 words of extra memory for PDF output out of 10000 (max. 10000000)
 
