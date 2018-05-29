@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.9.28)  27 MAY 2018 23:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.9.28)  29 MAY 2018 19:11
 entering extended mode
 **"./b is a plus c reduced.tex"
 ("b is a plus c reduced.tex"
@@ -1002,32 +1002,93 @@ File: images/3division.png Graphic file (type png)
 <use images/3division.png>
 Package pdftex.def Info: images/3division.png used on input line 213.
 (pdftex.def)             Requested size: 248.92938pt x 181.17642pt.
- [4] [5 <./images/3division.png>]
-("b is a plus c reduced.aux") ) 
+ [4]
+<images/cycle_a_c.png, id=28, 603.25375pt x 442.65375pt>
+File: images/cycle_a_c.png Graphic file (type png)
+
+<use images/cycle_a_c.png>
+Package pdftex.def Info: images/cycle_a_c.png used on input line 227.
+(pdftex.def)             Requested size: 301.62613pt x 221.32632pt.
+
+<images/process1_a_c.png, id=29, 669.50125pt x 229.85875pt>
+File: images/process1_a_c.png Graphic file (type png)
+
+<use images/process1_a_c.png>
+Package pdftex.def Info: images/process1_a_c.png used on input line 231.
+(pdftex.def)             Requested size: 334.7498pt x 114.92908pt.
+
+<images/process2_a_c.png, id=30, 650.43pt x 255.95625pt>
+File: images/process2_a_c.png Graphic file (type png)
+
+<use images/process2_a_c.png>
+Package pdftex.def Info: images/process2_a_c.png used on input line 232.
+(pdftex.def)             Requested size: 325.2142pt x 127.9778pt.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 239.
+
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 239.
+ [5 <./images/3division.png>] [6 <./images/cycle_a_c.png> <./images/process1_a_
+c.png>]
+<images/cycle_a_2a.png, id=41, 603.25375pt x 442.65375pt>
+File: images/cycle_a_2a.png Graphic file (type png)
+
+<use images/cycle_a_2a.png>
+Package pdftex.def Info: images/cycle_a_2a.png used on input line 256.
+(pdftex.def)             Requested size: 301.62613pt x 221.32632pt.
+
+<images/process1_a_2a.png, id=42, 669.50125pt x 229.85875pt>
+File: images/process1_a_2a.png Graphic file (type png)
+
+<use images/process1_a_2a.png>
+Package pdftex.def Info: images/process1_a_2a.png used on input line 257.
+(pdftex.def)             Requested size: 334.7498pt x 114.92908pt.
+
+<images/process2_a_2a.png, id=43, 650.43pt x 255.95625pt>
+File: images/process2_a_2a.png Graphic file (type png)
+
+<use images/process2_a_2a.png>
+Package pdftex.def Info: images/process2_a_2a.png used on input line 258.
+(pdftex.def)             Requested size: 325.2142pt x 127.9778pt.
+ [7 <./images/process2_a_c.png>] [8 <./images/cycle_a_2a.png> <./images/process
+1_a_2a.png>]
+<images/process2_a_2a_-c_is_2a.png, id=54, 650.43pt x 255.95625pt>
+File: images/process2_a_2a_-c_is_2a.png Graphic file (type png)
+
+<use images/process2_a_2a_-c_is_2a.png>
+Package pdftex.def Info: images/process2_a_2a_-c_is_2a.png used on input line 2
+77.
+(pdftex.def)             Requested size: 325.2142pt x 127.9778pt.
+ [9 <./images/process2_a_2a.png> <./images/process2_a_2a_-c_is_2a.png>] [10] ("
+b is a plus c reduced.aux") ) 
 Here is how much of TeX's memory you used:
- 6343 strings out of 493334
- 87901 string characters out of 3136649
- 171014 words of memory out of 3000000
- 9732 multiletter control sequences out of 15000+200000
+ 6402 strings out of 493334
+ 89263 string characters out of 3136649
+ 171075 words of memory out of 3000000
+ 9781 multiletter control sequences out of 15000+200000
  12876 words of font info for 40 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,12n,32p,976b,318s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Burning Soul\AppData\Local\MiKTeX\2.9
-\fonts\pk\ljfour\lh\lh-t2a\dpi600\lati1200.pk> <C:\Users\Burning Soul\AppData\L
-ocal\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\labx1200.pk> <C:\Users\Burning
- Soul\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\larm1200.pk><C:
-/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/P
-rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Pro
-gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Progra
-m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program F
-iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program File
-s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x
-86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/
-MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on "b is a plus c reduced.pdf" (5 pages, 146729 bytes).
+ 40i,12n,32p,976b,400s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\Burning Soul\AppData\Local\MiKTeX\2.9\f
+onts\pk\ljfour\lh\lh-t2a\dpi600\lati1200.pk> <C:\Users\Burning Soul\AppData\Loc
+al\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\labx1200.pk> <C:\Users\Burning S
+oul\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\larm1200.pk><C:/P
+rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Pro
+gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Progr
+am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program 
+Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Fil
+es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86
+)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKT
+eX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files (x86)/M
+iKTeX 2.9/fonts/type1/public/rsfs/rsfs10.pfb>
+Output written on "b is a plus c reduced.pdf" (10 pages, 254606 bytes).
 PDF statistics:
- 192 PDF objects out of 1000 (max. 8388607)
+ 235 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

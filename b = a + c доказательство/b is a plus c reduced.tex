@@ -43,7 +43,7 @@
 }
 
 \newcommand{\scalingimage}[3]{
-	\begin{figure}[H]
+	\begin{figure}
 		\center{
 			\includegraphics[scale=#2]{#1}
 		}
@@ -141,7 +141,7 @@
 		Отсюда следует, что $a - b + c \equiv 0 \hspace{5pt} (\mod \frac{\lcm(k)}{2})$.
 	\end{proof}
 
-	\begin{theorem}
+	\begin{theorem}\label{b is a plus c}
 		Пусть $(xy)^a(yx)^b(xy)^c$ = $(yx)^c(xy)^b(yx)^a$ - тождество в $S_k$ и $a + b + c \le \frac{\lcm(k)}{2}$. Тогда $b = a+c$.
 	\end{theorem}
 	\begin{proof}
@@ -223,7 +223,74 @@
 	\begin{proof}
 		От противного. Пусть ни одно из чисел $a$, $b$, $c$ не делится на $k$. Разберем несколько случаев.
 		\begin{enumerate}
-			\item $b+c \not \equiv_k 0$
+			\item $2a \equiv_k 0$.
+			\scalingimage{cycle_a_c}{0.5}{Цикл $xy$ автомата $\mathscr{A}$}
+			
+			Поскольку мы предположили, что $a \not \equiv_k 0$, значит $a \equiv_k \frac{k}{2}$. Так как $a+c=b$, $b \not \equiv_k 0$ по предположению, то $c \not \equiv_k a$.
+			
+			\scalingimage{process1_a_c}{0.5}{Чтение слова $(xy)^a(yx)^b(xy)^c$ автоматом $\mathscr{A}$}
+			\scalingimage{process2_a_c}{0.5}{Чтение слова $(yx)^c(xy)^b(yx)^a$ автоматом $\mathscr{A}$}
+			
+			Рассмотрим автомат $\mathscr{A}$, в котором $xy$ - перестановка с шагом 1, в которой поменяли местами $a$ и $c$, а $yx$ - перестановка с шагом -1 (см. Рисунок \ref{fig:cycle_a_c}). Данный автомат различит слова $(xy)^a(yx)^b(xy)^c$ и $(yx)^c(xy)^b(yx)^a$. 
+						
+			$\mathscr{A}$ закончит читать второе слово в состоянии $c-a$ (см. Рисунок \ref{fig:process2_a_c}).
+			Корректность переходов:
+			\begin{itemize}
+				\item $-c \not \equiv_k a$ и $-c \not \equiv_k c$ поскольку иначе в обоих случаях он был бы равен $\frac{k}{2}$ и совпадал бы с $a$;
+				\item $b-c = a$ из Теоремы \ref{b is a plus c}.
+			\end{itemize}
+			
+			$\mathscr{A}$ закончит читать второе слово в состоянии с номером $2c$ (см. Рисунок \ref{fig:process2_a_c}).
+			Корректность переходов:
+			\begin{itemize}
+				\item $c-b \equiv_k -a$ из Теоремы \ref{b is a plus c}, а $a \equiv_k -a$ поскольку $a \equiv_k \frac{k}{2}$;
+				\item $2c \not \equiv_k c$ поскольку по предположению $c \not \equiv_k 0$.
+			\end{itemize}
+			Конечное состояние при чтении $(yx)^c(xy)^b(yx)^a$ зависит от того, совпадает ли $2c$ с $a$ по модулю $k$:
+			\begin{itemize}
+				\item $2c \equiv_k a$, тогда состоянием с номером $2c$ будет состояние $c$, которое не совпадает с $c-a$, поскольку $-a$ не сравнимо с нулем по модулю $k$;
+				\item $2c \not \equiv_k a$, тогда конечным состоянием будет $2c$, которое не совпадает с $c-a$, поскольку $a+c \not \equiv_k 0$.
+			\end{itemize}
+			
+			\item $2a \not \equiv_k 0$ и $2a \not \equiv_k -c$
+			\scalingimage{cycle_a_2a}{0.5}{Цикл $yx$ автомата $\mathscr{B}$}
+			\scalingimage{process1_a_2a}{0.5}{Чтение слова $(xy)^a(yx)^b(xy)^c$ автоматом $\mathscr{B}$}
+			\scalingimage{process2_a_2a}{0.5}{Чтение слова $(yx)^c(xy)^b(yx)^a$ автоматом $\mathscr{B}$}
+			
+			Рассмотрим автомат $\mathscr{B}$, в котором $xy$ - перестановка с шагом 1, а $yx$ - перестановка с шагом -1, в которой поменяли местами $a$ и $2a$ (см. Рисунок \ref{fig:cycle_a_2a}). Данный автомат различит слова $(xy)^a(yx)^b(xy)^c$ и $(yx)^c(xy)^b(yx)^a$.
+			
+			$\mathscr{B}$ закончит читать $(xy)^a(yx)^b(xy)^c$ в состоянии $a$ (см. Рисунок \ref{fig:process1_a_2a}).
+			Корректность переходов:
+			\begin{itemize}
+				\item $2a-b = a-c$ по Теореме \ref{b is a plus c}, $a-c \not \equiv_k a$, так как $-c \not \equiv_k 0$ по предположению, и $a-c \not \equiv_k 2a$, так как $a+c \not \equiv_k 0$ также по предположению.
+			\end{itemize}
+		
+			$\mathscr{B}$ закончит читать $(yx)^c(xy)^b(yx)^a$ в состоянии $2a$ (см. Рисунок \ref{fig:process2_a_2a}).
+			Корректность переходов:
+			\begin{itemize}
+				\item $-c \not \equiv_k a$, поскольку $a+c \not \equiv_k 0$ по предположению, и $-c \not \equiv_k 2a$ по заданному ограничению;
+				\item $b-a = c$ по Теореме \ref{b is a plus c}.
+			\end{itemize}
+			Состояния $a$ и $2a$ не совпадают, так как $a \not \equiv_k 0$ по предположению.
+			
+			\item $2a \not \equiv_k 0$ и $2a \equiv_k -c$ и $3a \not \equiv_k 0$
+			\scalingimage{process2_a_2a_-c_is_2a}{0.5}{Чтение слова $(yx)^c(xy)^b(yx)^a$ автоматом $\mathscr{B}$ в случае, когда $2a \equiv_k -c$}
+			
+			Рассмотрим автомат $\mathscr{B}$ из предыдущего случая (см. Рисунок \ref{fig:cycle_a_2a}). В этом случае этот автомат также разделит рассматриваемую пару слов.
+			
+			Чтение слова $(xy)^a(yx)^b(xy)^c$ будет абсолютно таким же, как и в предыдущем случае.
+			Чтение слова $(yx)^c(xy)^b(yx)^a$ закончится в состоянии $-a$ (см. Рисунок \ref{fig:process2_a_2a_-c_is_2a}).
+			Корректность переходов:
+			\begin{itemize}
+				\item $2a \equiv_k -c$ по заданному ограничению;
+				\item $a+b \equiv_k 0$ поскольку $a+b = 2a+c \equiv_k 2a - 2a = 0$ по Теореме \ref{b is a plus c} и заданному ограничению;
+				\item $-a \not equiv_k a$, так как $2a \not \equiv_k 0$, и $-a \not equiv_k a$, поскольку $3a \not \equiv_k 0$ по заданному ограничению.
+			\end{itemize}
+			Состояния $a$ и $-a$ также не совпадают.
+			
+			\item $2a \not \equiv_k 0$ и $2a \equiv_k -c$ и $3a \equiv_k 0$
+			
+			Поскольку $3a \equiv_k 0$, то $a \equiv_k \frac{k}{3}$ или $a \equiv_k \frac{2k}{3}$
 		\end{enumerate}
 	\end{proof}
 
