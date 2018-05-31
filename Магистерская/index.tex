@@ -15,6 +15,9 @@
 \usepackage{algpseudocode}
 \usepackage{amsthm}
 
+\usepackage{amsfonts} %для жирных букв, обозначающих множества натуральных, целых и т п
+\usepackage{mathtools} %для объявления новых операторов
+\usepackage{verbatim} %для многострочных комментов
 \usepackage{mathrsfs} %для витиеватых букв
 
 \title{Различение слов перестановочными автоматами}
@@ -25,7 +28,7 @@
 \renewcommand{\baselinestretch}{1.5}
 \setlength{\parindent}{1cm}
 \graphicspath{ {images/} }
-\setlength{\abovecaptionskip}{-25pt}
+%\setlength{\abovecaptionskip}{-25pt}
 
 \bibliographystyle{utf8gost705u}
 
@@ -35,6 +38,16 @@
 			\includegraphics{#1}
 		}
 		\caption{#2}
+	\end{figure}
+}
+
+\newcommand{\scalingimage}[3]{
+	\begin{figure}[H]
+		\center{
+			\includegraphics[scale=#2]{#1}
+		}
+		\caption{#3}
+		\label{fig:#1}
 	\end{figure}
 }
 
@@ -59,6 +72,8 @@
 \newtheorem{definition}{Определение}[section]
 \newtheorem{example}{Пример}[section]
 \newtheorem*{note}{Замечание}
+
+\DeclareMathOperator{\lcm}{lcm}
 
 %\algtext*{EndIf}% Remove "end if" text
 %\algtext*{EndWhile}% Remove "end while" text
